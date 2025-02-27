@@ -34,75 +34,357 @@
   </header>
 
   <section class="options-section">
-    <div class="filters-container">
-      <h2>Filter on cuisine</h2>
-      <div class="filter">
-        <input
-          type="radio"
-          name="cuisine"
-          id="mediterranean"
-          value="mediterranean"
-          checked
+    <!-- Filter options -->
+    <div class="filters">
+      <h2 id="filter-heading">Filters</h2>
+      <div
+        id="filters-container"
+        class="filters-container open"
+      >
+        <!-- Diets -->
+        <div
+          id="diet-filter"
+          class="option-container"
         >
-        <label for="mediterranean">Mediterranean</label>
-        <input
-          type="radio"
-          name="cuisine"
-          id="middle-eastern"
-          value="middle-eastern"
+          <h3>Diet</h3>
+          <div class="filter-options">
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="diet"
+                id="vegan"
+                value="vegan"
+              >
+              <label for="vegan">Vegan</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="diet"
+                id="vegetarian"
+                value="vegetarian"
+              >
+              <label for="vegetarian">Vegetarian</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="diet"
+                id="gluten-free"
+                value="gluten-free"
+              >
+              <label for="gluten-free">Gluten-free</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="diet"
+                id="dairy-free"
+                value="dairy-free"
+              >
+              <label for="dairy-free">Dairy-free</label>
+            </span>
+          </div>
+        </div>
+        <!-- Cuisine -->
+        <div
+          id="cuisine-filter"
+          class="option-container"
         >
-        <label for="middle-eastern">Middle Eastern</label>
-        <input
-          type="radio"
-          name="cuisine"
-          id="asian"
-          value="asian"
+          <h3>Cuisine</h3>
+          <div class="filter-options">
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="cuisine"
+                id="mediterranean"
+                value="mediterranean"
+              >
+              <label for="mediterranean">Mediterranean</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="cuisine"
+                id="middle-eastern"
+                value="middle-eastern"
+              >
+              <label for="middle-eastern">Middle Eastern</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="cuisine"
+                id="asian"
+                value="asian"
+              >
+              <label for="asian">Asian</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="cuisine"
+                id="italian"
+                value="italian"
+              >
+              <label for="italian">Italian</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="cuisine"
+                id="mexican"
+                value="mexican"
+              >
+              <label for="mexican">Mexican</label>
+            </span>
+          </div>
+        </div>
+        <!-- Cooking time -->
+        <div
+          id="time-filter"
+          class="option-container"
         >
-        <label for="asian">Asian</label>
-        <input
-          type="radio"
-          name="cuisine"
-          id="italian"
-          value="italian"
+          <h3>Cooking Time</h3>
+          <div class="filter-options">
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="cookingTime"
+                id="under-15-min"
+                value="Under 15 min"
+              >
+              <label for="under-15-min">Under 15 min</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="cookingTime"
+                id="15-30-min"
+                value="15-30 min"
+              >
+              <label for="15-30-min">15-30 min</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="cookingTime"
+                id="30-60-min"
+                value="30-60 min"
+              >
+              <label for="30-60-min">30-60 min</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="cookingTime"
+                id="over-60-min"
+                value="Over 60 min"
+              >
+              <label for="over-60-min">Over 60 min</label>
+            </span>
+          </div>
+        </div>
+        <!-- Amount of ingredients -->
+        <div
+          id="ingredients-filter"
+          class="option-container"
         >
-        <label for="italian">Italian</label>
-        <input
-          type="radio"
-          name="cuisine"
-          id="mexican"
-          value="mexican"
-        >
-        <label for="mexican">Mexican</label>
+          <h3>Amount of Ingredients</h3>
+          <div class="filter-options">
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="numberOfIngredients"
+                id="under-5-ingredients"
+                value="Under 5"
+              >
+              <label for="under-5-ingredients">Under 5 ingredients</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="numberOfIngredients"
+                id="5-10-ingredients"
+                value="5-10"
+              >
+              <label for="5-10-ingredients">5-10 ingredients</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="numberOfIngredients"
+                id="11-15-ingredients"
+                value="11-15"
+              >
+              <label for="11-15-ingredients">11-15 ingredients</label>
+            </span>
+            <span>
+              <input
+                class="filter-option"
+                type="checkbox"
+                name="numberOfIngredients"
+                id="over-15-ingredients"
+                value="Over 15"
+              >
+              <label for="over-15-ingredients">Over 15 ingredients</label>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="sorting-container">
-      <h2>Sort on popularity</h2>
-      <div class="sorting">
-        <input
-          type="radio"
-          name="sorting"
-          id="descending"
-          value="descending"
-          checked
+
+    <!-- Sorting options -->
+    <div class="sorting">
+      <h2 id="sort-heading">Sorting Options</h2>
+      <div
+        id="sorting-container"
+        class="sorting-container open"
+      >
+        <!-- Cooking time -->
+        <div
+          id="time-sorting"
+          class="option-container"
         >
-        <label for="descending">Descending</label>
-        <input
-          type="radio"
-          name="sorting"
-          id="ascending"
-          value="ascending"
+          <h3>Cooking Time</h3>
+          <div class="sorting-options">
+            <span>
+              <input
+                type="radio"
+                class="sorting-option"
+                name="sorting"
+                id="time-descending"
+                value="time-descending"
+              >
+              <label for="time-descending">Descending</label>
+            </span>
+            <span>
+              <input
+                type="radio"
+                class="sorting-option"
+                name="sorting"
+                id="time-ascending"
+                value="time-ascending"
+              >
+              <label for="time-ascending">Ascending</label>
+            </span>
+          </div>
+
+        </div>
+        <!-- Popularity -->
+        <div
+          id="popularity-sorting"
+          class="option-container"
         >
-        <label for="ascending">Ascending</label>
+          <h3>Popularity</h3>
+          <div class="sorting-options">
+            <span>
+              <input
+                type="radio"
+                class="sorting-option"
+                name="sorting"
+                id="popularity-descending"
+                value="popularity-descending"
+              >
+              <label for="popularity-descending">Descending</label>
+            </span>
+            <span>
+              <input
+                type="radio"
+                class="sorting-option"
+                name="sorting"
+                id="popularity-ascending"
+                value="popularity-ascending"
+              >
+              <label for="popularity-ascending">Ascending</label>
+            </span>
+          </div>
+
+        </div>
+        <!-- Price per Serving -->
+        <div
+          id="price-sorting"
+          class="option-container"
+        >
+          <h3>Price per Serving</h3>
+          <div class="sorting-options">
+            <span>
+              <input
+                type="radio"
+                class="sorting-option"
+                name="sorting"
+                id="price-descending"
+                value="price-descending"
+              >
+              <label for="price-descending">Descending</label>
+            </span>
+            <span>
+              <input
+                type="radio"
+                class="sorting-option"
+                name="sorting"
+                id="price-ascending"
+                value="price-ascending"
+              >
+              <label for="price-ascending">Ascending</label>
+            </span>
+          </div>
+
+        </div>
+        <!-- Amount of Ingredients -->
+        <div
+          id="ingredients-sorting"
+          class="option-container"
+        >
+          <h3>Amount of Ingredients</h3>
+          <div class="sorting-options">
+            <span>
+              <input
+                type="radio"
+                class="sorting-option"
+                name="sorting"
+                id="ingredients-descending"
+                value="ingredients-descending"
+              >
+              <label for="ingredients-descending">Descending</label>
+            </span>
+            <span>
+              <input
+                type="radio"
+                class="sorting-option"
+                name="sorting"
+                id="ingredients-ascending"
+                value="ingredients-ascending"
+              >
+              <label for="ingredients-ascending">Ascending</label>
+            </span>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>
 
   <section class="cards-section">
     <article class="card">
-      <h2 class="recipe-title">Temporary placeholder for filters/sorting options</h2>
-      <div>
-        <p>Messages goes here</p>
-      </div>
+      <h2 class="recipe-title">Temporary placeholder for displaying user selections</h2>
+      <div id="message-box"></div>
     </article>
     <article class="card">
       <img
@@ -130,9 +412,9 @@
       </div>
     </article>
 
-
   </section>
 
+  <script src="./script.js"></script>
 </body>
 
 </html>

@@ -21,28 +21,54 @@ header {
 .options-section {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 30px;
 }
 
-h2 {
+.options-section h2 {
   font-size: 1.375em;
   font-weight: 700;
+  cursor: pointer;
+}
+
+.options-section h3 {
+  font-size: 1.125em;
+  font-weight: 700;
+}
+
+.filters,
+.sorting {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .filters-container,
 .sorting-container {
   display: flex;
+  flex-wrap: wrap;
+  column-gap: 50px;
+  row-gap: 16px;
+}
+
+.option-container {
+  display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.filter,
-.sorting {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+.hidden {
+  display: none;
 }
 
+.sorting-options,
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 12px;
+  row-gap: 26px;
+}
+
+input[type="checkbox"],
 input[type="radio"] {
   display: none;
 }
@@ -55,33 +81,34 @@ label {
   cursor: pointer;
 }
 
-.filter label {
+.filter-options label {
   background: #ccffe2;
 }
 
-.filter label:hover {
+.filter-options label:hover {
   border-color: #0018A4;
 }
 
-/* label style when radio is checked */
-.filter label .selected {
+/* style label when checkbox is checked */
+.filter-option:checked+label {
   color: #fff;
   background: #0018A4;
 }
 
-.sorting label {
+.sorting-options label {
   background: #ffecea;
 }
 
-.sorting label:hover {
+.sorting-options label:hover {
   color: #FFF;
   background: #ff6589;
   border-color: #0018A4;
 }
 
-/* label style when radio is checked */
-.sorting label .selected {
-  border-color: transparent;
+/* style label when radio button is checked */
+.sorting-option:checked+label {
+  color: #FFF;
+  background: #ff6589;
 }
 
 .cards-section {
@@ -140,17 +167,4 @@ label {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-
-@media (min-width: 900px) {
-  .options-section {
-    flex-direction: row;
-    gap: 88px;
-  }
-
-  .filters-container,
-  .sorting-container {
-    max-width: 400px;
-  }
 }
