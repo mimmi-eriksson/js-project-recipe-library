@@ -7,28 +7,31 @@ const filtersContainer = document.getElementById("filters-container")
 const sortingHeading = document.getElementById("sort-heading")
 const sortingContainer = document.getElementById("sorting-container")
 
-
-// funtion to check which filters are selected (checked)
+// check which filters are selected (checked)
 const checkSelectedFilters = () => {
-  let selectedFilters = {
+  let selectedFiltersList = []
+  let selectedFiltersObject = {
     diet: [],
     cuisine: [],
     cookingTime: [],
     numberOfIngredients: []
   }
   // loop through filter options
-  Object.keys(selectedFilters).forEach(key => {
+  Object.keys(selectedFiltersObject).forEach(key => {
     filterOptions.forEach((filterOption) => {
       if ((filterOption.name === key) && (filterOption.checked)) {
-        selectedFilters[key].push(filterOption.value)
+        selectedFiltersObject[key].push(filterOption.value)
+        selectedFiltersList.push(filterOption)
       }
     })
   })
+  // only show the selected filter options
+  showCheckedOption("filter", selectedFiltersList)
   // display filters selection
-  displaySelectedFilters(selectedFilters)
+  displaySelectedFilters(selectedFiltersObject)
 }
 
-// function to display the user's filter selection
+// display the user's filter selection
 const displaySelectedFilters = (selectedFilters) => {
   // display message in the placeholder card
   messagebox.innerHTML += `<p>Filtering on:</p>`
@@ -39,7 +42,7 @@ const displaySelectedFilters = (selectedFilters) => {
   }
 }
 
-// function to check which sorting option is selected
+// check which sorting option is selected
 const checkSelectedSortingOption = () => {
   let selectedSortingOption
   // loop thought the sorting options
@@ -48,12 +51,14 @@ const checkSelectedSortingOption = () => {
       selectedSortingOption = sortingOption
     }
   })
-  //
+  // only show the selected sorting option
+  const selectedSortingOptionArray = new Array(selectedSortingOption)
+  showCheckedOption("sorting", selectedSortingOptionArray)
   // display sorting selection
   displaySortingSelection(selectedSortingOption)
 }
 
-// function to display the user's sorting selection
+// display the user's sorting selection
 const displaySortingSelection = (selectedSortingOption) => {
   // display message in the placeholder card
   const sortOn = selectedSortingOption.id.substring(selectedSortingOption.id.lastIndexOf("-"), -1)
@@ -62,8 +67,7 @@ const displaySortingSelection = (selectedSortingOption) => {
 }
 
 // show all filters/sorting options
-const showAll = (option) => {
-  let container = (option === "filters") ? filtersContainer : sortingContainer;
+const showAll = (container) => {
   container.classList.add("open")
   const containerGroups = container.children
   for (let i = 0; i < containerGroups.length; i++) {
@@ -71,13 +75,32 @@ const showAll = (option) => {
   }
 }
 // hide all filters/sorting options
-const hideAll = (option) => {
-  let container = (option === "filters") ? filtersContainer : sortingContainer;
+const hideAll = (container) => {
   container.classList.remove("open")
   const containerGroups = container.children
   for (let i = 0; i < containerGroups.length; i++) {
     containerGroups[i].classList.add("hidden")
   }
+}
+
+// show only the checked options
+const showCheckedOption = (option, selectedOptions) => {
+  let optionsList
+  if (option === "sorting") {
+    optionsList = sortingOptions
+  } else {
+    optionsList = filterOptions
+  }
+  // loop thought the options and hide all
+  optionsList.forEach((sortingOption) => {
+    sortingOption.parentElement.parentElement.parentElement.classList.add("hidden")
+  })
+  // show the selected option groups
+  for (let i = 0; i < selectedOptions.length; i++) {
+    selectedOptions[i].parentElement.parentElement.parentElement.classList.remove("hidden")
+  }
+  // remove open class on the main container
+  selectedOptions[0].parentElement.parentElement.parentElement.parentElement.classList.remove("open")
 }
 
 // Listen to when a filter/sorting option is changed (user selection)
@@ -88,19 +111,19 @@ sortingOptions.forEach((sortingOption) => {
   sortingOption.addEventListener("change", () => checkSelectedSortingOption())
 })
 
-// toogle filters/sorting options when heading is clicked
+// Listen to when toogle filters/sorting heading is clicked to toogle the options
 filtersHeading.addEventListener("click", () => {
   if (filtersContainer.classList.contains("open")) {
-    hideAll("filters")
+    hideAll(filtersContainer)
   } else {
-    showAll("filters")
+    showAll(filtersContainer)
   }
 })
 sortingHeading.addEventListener("click", () => {
   if (sortingContainer.classList.contains("open")) {
-    hideAll("sorting")
+    hideAll(sortingContainer)
   } else {
-    showAll("sorting")
+    showAll(sortingContainer)
   }
 })
 
