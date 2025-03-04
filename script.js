@@ -169,13 +169,11 @@ const sortingOptions = document.querySelectorAll(".sorting-option")
 // const sortingHeading = document.getElementById("sort-heading")
 // const sortingContainer = document.getElementById("sorting-container")
 
-// user selection variables
-// let selectedFilters = []
 
 
-// loop through the filter options to check which ones are selected (checked)
+// loop through the filter/sorting options to check which ones are selected
 const findSelectedFilters = () => {
-  // objects to save the selections
+  // variables to save the selections
   let selectedFilters = {
     diet: [],
     cuisine: [],
@@ -183,15 +181,15 @@ const findSelectedFilters = () => {
     numberOfIngredients: []
   }
   let selectedSorting
-  // if checkbox is checked - add input.id to the object (input.name is the key)
+  // if checkbox is checked - add input.id to filtering object (input.name is the key)
   filterOptions.forEach(option => {
     (option.checked ? selectedFilters[option.name].push(option.id) : null)
   })
-  // if radio is checked add id to array
+  // if radio is checked add id to sorting varaible
   sortingOptions.forEach(option => {
     (option.checked ? selectedSorting = option.id : null)
   })
-  // filter recipes based on selection
+  // filter and sort recipes based on selection
   filterRecipes(selectedFilters)
   sortRecipes(selectedSorting)
 }
@@ -211,6 +209,7 @@ const filterRecipes = (selectedFilters) => {
 
 }
 
+// sort recipes
 const sortRecipes = (selectedSorting) => {
   console.log(selectedSorting)
   // display message in the placeholder card
@@ -232,7 +231,7 @@ sortingOptions.forEach(option => {
   option.addEventListener("change", () => findSelectedFilters())
 })
 
-// !!!!!!!!!!!!-------ADD SORTING OPTIONS-----!!!!!!!!!!!!!!!!!!
+
 
 
 
@@ -263,17 +262,6 @@ const checkSelectedFilters = () => {
   displaySelectedFilters(selectedFiltersObject)
 }
 
-// display the user's filter selection
-const displaySelectedFilters = (selectedFilters) => {
-  // display message in the placeholder card
-  messagebox.innerHTML += `<p>Filtering on:</p>`
-  for (const [key, value] of Object.entries(selectedFilters)) {
-    if (value.length > 0) {
-      messagebox.innerHTML += `<p> ${key}: ${value}</p>`
-    }
-  }
-}
-
 // check which sorting option is selected
 const checkSelectedSortingOption = () => {
   let selectedSortingOption
@@ -288,14 +276,6 @@ const checkSelectedSortingOption = () => {
   showCheckedOption("sorting", selectedSortingOptionArray)
   // display sorting selection
   displaySortingSelection(selectedSortingOption)
-}
-
-// display the user's sorting selection
-const displaySortingSelection = (selectedSortingOption) => {
-  // display message in the placeholder card
-  const sortOn = selectedSortingOption.id.substring(selectedSortingOption.id.lastIndexOf("-"), -1)
-  const sortingOrder = selectedSortingOption.id.substring((selectedSortingOption.id.lastIndexOf("-") + 1))
-  messagebox.innerHTML += `<p>Sorting on ${sortOn} in the ${sortingOrder} order</p>`
 }
 
 // show all filters/sorting options
@@ -334,14 +314,6 @@ const showCheckedOption = (option, selectedOptions) => {
   // remove open class on the main container
   selectedOptions[0].parentElement.parentElement.parentElement.parentElement.classList.remove("open")
 }
-
-// Listen to when a filter/sorting option is changed (user selection)
-filterOptions.forEach((filterOption) => {
-  filterOption.addEventListener("change", () => checkSelectedFilters())
-})
-sortingOptions.forEach((sortingOption) => {
-  sortingOption.addEventListener("change", () => checkSelectedSortingOption())
-})
 
 // Listen to when toogle filters/sorting heading is clicked to toogle the options
 filtersHeading.addEventListener("click", () => {
