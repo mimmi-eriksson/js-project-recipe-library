@@ -162,6 +162,8 @@ const RECIPES = [
 
 // DOM selectors
 const messagebox = document.getElementById("message-box")
+
+const cardsContainer = document.getElementById("cards-section")
 const filterOptions = document.querySelectorAll(".filter-option")
 const sortingOptions = document.querySelectorAll(".sorting-option")
 // const filtersHeading = document.getElementById("filter-heading")
@@ -201,7 +203,7 @@ const filterRecipes = (selectedFilters) => {
   messagebox.innerHTML += `<p>Filtering on:</p>`
   for (const [key, value] of Object.entries(selectedFilters)) {
     if (value.length > 0) {
-      messagebox.innerHTML += `<p> ${key}: ${value}</p>`
+      messagebox.innerHTML += `<p>${key}: ${value}</p>`
     }
   }
 
@@ -222,8 +224,46 @@ const sortRecipes = (selectedSorting) => {
 }
 
 
+// show recipes - create a card and add recipe information
+const showRecipes = (recipesArray) => {
+  recipesArray.forEach(recipe => {
+    cardsContainer.innerHTML +=
+      `
+        <article class="card">
+          <img src="${recipe.image}" alt="${recipe.title}">
+          <h2>${recipe.title}</h2>
+          <hr>
+          <div class="details">
+            <span>
+              <h3>Cuisine:</h3>
+              <p>${recipe.cuisine}</p>
+            </span>
+            <span>
+              <h3>Time:</h3>
+              <p>${recipe.readyInMinutes} minutes</p>
+            </span>
+          </div>
+          <hr>
+          <div class="ingredients">
+            <h3>Ingredients</h3>
+            <ul></ul> 
+          </div>
+        </article>
+      `
+    // local DOM selector to list the ingredients
+    const ingredientsList = document.getElementsByTagName("UL")[document.getElementsByTagName("UL").length - 1]
+    recipe.ingredients.forEach(ingredient => {
+      ingredientsList.innerHTML += `<li>${ingredient}</li>`
+    })
+  })
+}
 
-// Add event listeners to all filter/sorting options
+
+
+
+
+
+// Add event listeners when filter/sorting options is changed
 filterOptions.forEach(option => {
   option.addEventListener("change", () => findSelectedFilters())
 })
@@ -231,8 +271,8 @@ sortingOptions.forEach(option => {
   option.addEventListener("change", () => findSelectedFilters())
 })
 
-
-
+// show all recipes when site is loaded
+cardsContainer.addEventListener("load", showRecipes(RECIPES))
 
 
 
