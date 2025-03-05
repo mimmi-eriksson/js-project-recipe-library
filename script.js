@@ -2,7 +2,7 @@ const RECIPES = [
   {
     id: 1,
     title: "Vegan Lentil Soup",
-    image: "./chicken.webp",
+    image: "./placeholder-image.png",
     readyInMinutes: 30,
     servings: 4,
     sourceUrl: "https://example.com/vegan-lentil-soup",
@@ -26,7 +26,7 @@ const RECIPES = [
   {
     id: 2,
     title: "Vegetarian Pesto Pasta",
-    image: "./chicken.webp",
+    image: "./placeholder-image.png",
     readyInMinutes: 25,
     servings: 2,
     sourceUrl: "https://example.com/vegetarian-pesto-pasta",
@@ -48,7 +48,7 @@ const RECIPES = [
   {
     id: 3,
     title: "Gluten-Free Chicken Stir-Fry",
-    image: "./chicken.webp",
+    image: "./placeholder-image.png",
     readyInMinutes: 20,
     servings: 3,
     sourceUrl: "https://example.com/gluten-free-chicken-stir-fry",
@@ -74,7 +74,7 @@ const RECIPES = [
   {
     id: 4,
     title: "Dairy-Free Tacos",
-    image: "./chicken.webp",
+    image: "./placeholder-image.png",
     readyInMinutes: 15,
     servings: 2,
     sourceUrl: "https://example.com/dairy-free-tacos",
@@ -94,7 +94,7 @@ const RECIPES = [
   {
     id: 5,
     title: "Middle Eastern Hummus",
-    image: "./chicken.webp",
+    image: "./placeholder-image.png",
     readyInMinutes: 10,
     servings: 4,
     sourceUrl: "https://example.com/middle-eastern-hummus",
@@ -113,7 +113,7 @@ const RECIPES = [
   {
     id: 6,
     title: "Quick Avocado Toast",
-    image: "./chicken.webp",
+    image: "./placeholder-image.png",
     readyInMinutes: 5,
     servings: 1,
     sourceUrl: "https://example.com/quick-avocado-toast",
@@ -131,7 +131,7 @@ const RECIPES = [
   {
     id: 7,
     title: "Beef Stew",
-    image: "./chicken.webp",
+    image: "./placeholder-image.png",
     readyInMinutes: 90,
     servings: 5,
     sourceUrl: "https://example.com/beef-stew",
@@ -161,7 +161,7 @@ const RECIPES = [
 ]
 
 // DOM selectors
-const messagebox = document.getElementById("message-box")
+const messageBox = document.getElementById("message-box")
 
 const cardsContainer = document.getElementById("cards-section")
 const filterOptions = document.querySelectorAll(".filter-option")
@@ -200,10 +200,10 @@ const findSelectedFilters = () => {
 const filterRecipes = (selectedFilters) => {
   console.table(selectedFilters)
   // display message in the placeholder card
-  messagebox.innerHTML += `<p>Filtering on:</p>`
+  messageBox.innerHTML += `<p>Filtering on:</p>`
   for (const [key, value] of Object.entries(selectedFilters)) {
     if (value.length > 0) {
-      messagebox.innerHTML += `<p>${key}: ${value}</p>`
+      messageBox.innerHTML += `<p>${key}: ${value}</p>`
     }
   }
 
@@ -215,11 +215,13 @@ const filterRecipes = (selectedFilters) => {
 const sortRecipes = (selectedSorting) => {
   console.log(selectedSorting)
   // display message in the placeholder card
-  const sortOn = selectedSorting.split('-')[0]
-  const sortingOrder = selectedSorting.split('-')[1]
-  messagebox.innerHTML += `<p>Sorting on ${sortOn} in the ${sortingOrder} order</p>`
-
-
+  const sortingMessage = (selectedSorting
+    ? (`<p>
+          Sorting on ${selectedSorting.split('-')[0]} in the ${selectedSorting.split('-')[1]} order
+        </p>`
+    )
+    : ("<p>No sorting selected</p>"))
+  messageBox.innerHTML += sortingMessage
 
 }
 
@@ -272,7 +274,8 @@ sortingOptions.forEach(option => {
 })
 
 // show all recipes when site is loaded
-cardsContainer.addEventListener("load", showRecipes(RECIPES))
+document.getElementsByTagName("html")[0].addEventListener("load", showRecipes(RECIPES))
+
 
 
 
