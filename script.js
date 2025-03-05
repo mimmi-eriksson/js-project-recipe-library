@@ -171,18 +171,17 @@ const sortingOptions = document.querySelectorAll(".sorting-option")
 // const sortingHeading = document.getElementById("sort-heading")
 // const sortingContainer = document.getElementById("sorting-container")
 
-
+let selectedSorting
 
 // loop through the filter/sorting options to check which ones are selected
 const findSelectedFilters = () => {
   // variables to save the selections
   let selectedFilters = {
-    diet: [],
+    diets: [],
     cuisine: [],
     cookingTime: [],
     numberOfIngredients: []
   }
-  let selectedSorting
   // if checkbox is checked - add input.id to filtering object (input.name is the key)
   filterOptions.forEach(option => {
     (option.checked ? selectedFilters[option.name].push(option.id) : null)
@@ -192,27 +191,75 @@ const findSelectedFilters = () => {
     (option.checked ? selectedSorting = option.id : null)
   })
   // filter and sort recipes based on selection
-  filterRecipes(selectedFilters)
-  sortRecipes(selectedSorting)
+  applyFilters(selectedFilters)
+
 }
 
-// filter recipes
-const filterRecipes = (selectedFilters) => {
+// apply filters
+const applyFilters = (selectedFilters) => {
   console.table(selectedFilters)
-  // display message in the placeholder card
-  messageBox.innerHTML += `<p>Filtering on:</p>`
+  let filteredRecipes = RECIPES
+  // loop through the selected filtersArray
   for (const [key, value] of Object.entries(selectedFilters)) {
+    // 
     if (value.length > 0) {
-      messageBox.innerHTML += `<p>${key}: ${value}</p>`
+      value.forEach(val => {
+        console.log('Checking for filters:', key, val)
+        filteredRecipes = filterRecipes(filteredRecipes, key, val)
+        console.log('Filtered recipes:', filteredRecipes)
+      })
+
     }
+
   }
 
 
+  // if several filters are checked it shows recipes applying to all filters
+  // want to show recipes applying to either on OR the other filter!!!
+
+
+  console.log('Filtered recipes:', filteredRecipes)
+
+
+
+  // sort filtered recipes
+  sortRecipes(filteredRecipes)
+
+
 
 }
 
+
+
+// filter recipes
+const filterRecipes = (recipeArray, filter, value) => {
+  let filteredRecipes
+  if (filter === 'diets') {
+    console.log('Filter key is diets')
+    filteredRecipes = recipeArray.filter(recipe => (recipe[filter].includes(value)))
+  } else if (filter === 'cuisine') {
+    console.log('Filter key is cuisine')
+    filteredRecipes = recipeArray.filter(recipe => (recipe[filter].toLowerCase() === value))
+    // doesnt work for middle eastern.....................
+  } else if (filter === 'cookingTime') {
+    console.log('Filter key is cooking time')
+    // filter on time
+
+  } else if (filter === 'numberOfIngredients') {
+    console.log('Filter key is number of ingredients')
+    // filter on number of ingredients
+
+  } else {
+    // error???
+  }
+
+  return filteredRecipes
+}
+
 // sort recipes
-const sortRecipes = (selectedSorting) => {
+const sortRecipes = (recipesArray) => {
+  // if no filters are selected (filtersArray undefined) 
+  let sortedRecipes = (recipesArray ? recipesArray : RECIPES)
   console.log(selectedSorting)
   // display message in the placeholder card
   const sortingMessage = (selectedSorting
@@ -223,11 +270,16 @@ const sortRecipes = (selectedSorting) => {
     : ("<p>No sorting selected</p>"))
   messageBox.innerHTML += sortingMessage
 
+  // show selected recipes
+  showRecipes(sortedRecipes)
 }
 
 
 // show recipes - create a card and add recipe information
 const showRecipes = (recipesArray) => {
+  // clear container
+  cardsContainer.innerHTML = ""
+  // display recipes
   recipesArray.forEach(recipe => {
     cardsContainer.innerHTML +=
       `
