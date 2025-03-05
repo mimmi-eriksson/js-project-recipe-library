@@ -161,8 +161,6 @@ const RECIPES = [
 ]
 
 // DOM selectors
-const messageBox = document.getElementById("message-box")
-
 const cardsContainer = document.getElementById("cards-section")
 const filterOptions = document.querySelectorAll(".filter-option")
 const sortingOptions = document.querySelectorAll(".sorting-option")
@@ -171,6 +169,7 @@ const sortingOptions = document.querySelectorAll(".sorting-option")
 // const sortingHeading = document.getElementById("sort-heading")
 // const sortingContainer = document.getElementById("sorting-container")
 
+// global variable
 let selectedSorting
 
 // loop through the filter/sorting options to check which ones are selected
@@ -197,6 +196,7 @@ const findSelectedFilters = () => {
 
 // apply filters
 const applyFilters = (selectedFilters) => {
+  // if no filters are selected - filteredRecipes will be all recipes
   let filteredRecipes = RECIPES
   // loop through the selected filtersArray
   for (const [key, value] of Object.entries(selectedFilters)) {
@@ -260,19 +260,41 @@ const filterRecipes = (recipeArray, filter, value) => {
 
 // sort recipes
 const sortRecipes = (recipesArray) => {
-  console.log('Filtered recipes:', recipesArray)
-  // if no filters are selected (filtersArray undefined) 
-  let sortedRecipes = (recipesArray ? recipesArray : RECIPES)
-  console.log(selectedSorting)
-  // display message in the placeholder card
-  const sortingMessage = (selectedSorting
-    ? (`<p>
-          Sorting on ${selectedSorting.split('-')[0]} in the ${selectedSorting.split('-')[1]} order
-        </p>`
-    )
-    : ("<p>No sorting selected</p>"))
-  messageBox.innerHTML += sortingMessage
-
+  let sortedRecipes
+  // if sorting s selected - sort recipes array
+  if (selectedSorting) {
+    const sortOn = selectedSorting.split('-')[0]
+    const sortingOrder = selectedSorting.split('-')[1]
+    // different cases for each sorting option
+    if (sortOn === 'time') {
+      if (sortingOrder === 'ascending') {
+        sortedRecipes = recipesArray.sort((a, b) => (a.readyInMinutes - b.readyInMinutes))
+      } else if (sortingOrder === 'descending') {
+        sortedRecipes = recipesArray.sort((a, b) => (b.readyInMinutes - a.readyInMinutes))
+      }
+    } else if (sortOn === 'popularity') {
+      if (sortingOrder === 'ascending') {
+        sortedRecipes = recipesArray.sort((a, b) => (a.popularity - b.popularity))
+      } else if (sortingOrder === 'descending') {
+        sortedRecipes = recipesArray.sort((a, b) => (b.popularity - a.popularity))
+      }
+    } else if (sortOn === 'price') {
+      if (sortingOrder === 'ascending') {
+        sortedRecipes = recipesArray.sort((a, b) => (a.pricePerServing - b.pricePerServing))
+      } else if (sortingOrder === 'descending') {
+        sortedRecipes = recipesArray.sort((a, b) => (b.pricePerServing - a.pricePerServing))
+      }
+    } else if (sortOn === 'ingredients') {
+      if (sortingOrder === 'ascending') {
+        sortedRecipes = recipesArray.sort((a, b) => (a.ingredients.length - b.ingredients.length))
+      } else if (sortingOrder === 'descending') {
+        sortedRecipes = recipesArray.sort((a, b) => (b.ingredients.length - a.ingredients.length))
+      }
+    }
+  } else {
+    // if no sorting is selected - sorted array will be same as filtered array
+    sortedRecipes = recipesArray
+  }
   // show selected recipes
   showRecipes(sortedRecipes)
 }
@@ -280,9 +302,9 @@ const sortRecipes = (recipesArray) => {
 
 // show recipes - create a card and add recipe information
 const showRecipes = (recipesArray) => {
-  // clear container
+  // clear cards container
   cardsContainer.innerHTML = ""
-  // display recipes
+  // display recipes in array
   recipesArray.forEach(recipe => {
     cardsContainer.innerHTML +=
       `

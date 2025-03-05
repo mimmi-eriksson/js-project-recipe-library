@@ -1,17 +1,9 @@
-[X] filter function that works on all filters
-  [X] fix 'middle-eastern' !== 'Middle Eastern'
-  [X] filter on cooking time
-  [X] filter on number of ingredents 
-[] sorting function that works for:
-  [] cooking time
-  [] popularity
-  [] price
-  [] number of ingredients
+Requirements:
 [] Feature a button that selects a random recipe, and your page should display the selected item
 [] Have an empty state, e.g. if there are no recipes matching the filter - show a meaningful message to the user
 
 
-if time allows
+If time allows:
 [] change if else to switch?
 [] show more info in the recipes cards:
   [] diets
