@@ -197,67 +197,70 @@ const findSelectedFilters = () => {
 
 // apply filters
 const applyFilters = (selectedFilters) => {
-  console.table(selectedFilters)
   let filteredRecipes = RECIPES
   // loop through the selected filtersArray
   for (const [key, value] of Object.entries(selectedFilters)) {
-    // 
+    // filters where option(s) has been selected have a value.length > 0
     if (value.length > 0) {
+      // if several options have been selected - show recipes matching either of the options
+      let matchingRecipes = []
       value.forEach(val => {
-        console.log('Checking for filters:', key, val)
-        filteredRecipes = filterRecipes(filteredRecipes, key, val)
-        console.log('Filtered recipes:', filteredRecipes)
+        matchingRecipes = matchingRecipes.concat(filterRecipes(filteredRecipes, key, val))
       })
-
+      // only filter on the matching recipes array when checking next filter
+      filteredRecipes = matchingRecipes
     }
-
   }
-
-
-  // if several filters are checked it shows recipes applying to all filters
-  // want to show recipes applying to either on OR the other filter!!!
-
-
-  console.log('Filtered recipes:', filteredRecipes)
-
-
-
   // sort filtered recipes
   sortRecipes(filteredRecipes)
-
-
-
 }
-
-
 
 // filter recipes
 const filterRecipes = (recipeArray, filter, value) => {
   let filteredRecipes
+  // different cases depending on the filter
   if (filter === 'diets') {
-    console.log('Filter key is diets')
+    // filter on diets
     filteredRecipes = recipeArray.filter(recipe => (recipe[filter].includes(value)))
   } else if (filter === 'cuisine') {
-    console.log('Filter key is cuisine')
-    filteredRecipes = recipeArray.filter(recipe => (recipe[filter].toLowerCase() === value))
-    // doesnt work for middle eastern.....................
+    // filter on cuisine
+    // using .toLowerCase() and .replace(' ', '-') to change eg. 'Middle Eastern' to 'middle-eastern'
+    filteredRecipes = recipeArray.filter(recipe => (recipe[filter].toLowerCase().replace(' ', '-') === value))
   } else if (filter === 'cookingTime') {
-    console.log('Filter key is cooking time')
-    // filter on time
-
+    // filter on cooking time
+    if (value === 'under-15-min') {
+      filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes < 15))
+    } else if (value === '15-30-min') {
+      filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 15 && recipe.readyInMinutes <= 30))
+    } else if (value === '30-60-min') {
+      filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 30 && recipe.readyInMinutes <= 60))
+    } else if (value === 'over-60-min') {
+      filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes > 60))
+    } else {
+      // display error?
+    }
   } else if (filter === 'numberOfIngredients') {
-    console.log('Filter key is number of ingredients')
     // filter on number of ingredients
-
+    if (value === 'under-5-ingredients') {
+      filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length < 5))
+    } else if (value === '5-10-ingredients') {
+      filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length >= 5 && recipe.ingredients.length <= 10))
+    } else if (value === '11-15-ingredients') {
+      filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length >= 11 && recipe.ingredients.length <= 15))
+    } else if (value === 'over-15-ingredients') {
+      filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length > 15))
+    } else {
+      // display error?
+    }
   } else {
-    // error???
+    // display error?
   }
-
   return filteredRecipes
 }
 
 // sort recipes
 const sortRecipes = (recipesArray) => {
+  console.log('Filtered recipes:', recipesArray)
   // if no filters are selected (filtersArray undefined) 
   let sortedRecipes = (recipesArray ? recipesArray : RECIPES)
   console.log(selectedSorting)
