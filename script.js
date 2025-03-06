@@ -310,10 +310,20 @@ const pickARandomRecipe = (recipesArray) => {
 const showRecipes = (recipesArray) => {
   // clear cards container
   cardsContainer.innerHTML = ""
-  // display recipes in array
-  recipesArray.forEach(recipe => {
+  // if no recipes matches the selected filters - recipesArray will be empty
+  if (recipesArray.length === 0) {
+    // display a message to the user
     cardsContainer.innerHTML +=
       `
+    <article class="card">
+      <h2>No recipes matching the selected filters</h2>
+    </article>
+    `
+  } else {
+    // display recipes in array
+    recipesArray.forEach(recipe => {
+      cardsContainer.innerHTML +=
+        `
         <article class="card">
           <img src="${recipe.image}" alt="${recipe.title}">
           <h2>${recipe.title}</h2>
@@ -335,12 +345,13 @@ const showRecipes = (recipesArray) => {
           </div>
         </article>
       `
-    // local DOM selector to list the ingredients
-    const ingredientsList = document.getElementsByTagName("UL")[document.getElementsByTagName("UL").length - 1]
-    recipe.ingredients.forEach(ingredient => {
-      ingredientsList.innerHTML += `<li>${ingredient}</li>`
+      // local DOM selector to list the ingredients
+      const ingredientsList = document.getElementsByTagName("UL")[document.getElementsByTagName("UL").length - 1]
+      recipe.ingredients.forEach(ingredient => {
+        ingredientsList.innerHTML += `<li>${ingredient}</li>`
+      })
     })
-  })
+  }
 }
 
 
