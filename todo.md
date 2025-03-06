@@ -1,6 +1,7 @@
 Requirements:
-[] Feature a button that selects a random recipe, and your page should display the selected item
+[X] Feature a button that selects a random recipe, and your page should display the selected item
 [] Have an empty state, e.g. if there are no recipes matching the filter - show a meaningful message to the user
+
 
 
 If time allows:

@@ -164,6 +164,7 @@ const RECIPES = [
 const cardsContainer = document.getElementById("cards-section")
 const filterOptions = document.querySelectorAll(".filter-option")
 const sortingOptions = document.querySelectorAll(".sorting-option")
+const randomButton = document.getElementById("random-button")
 // const filtersHeading = document.getElementById("filter-heading")
 // const filtersContainer = document.getElementById("filters-container")
 // const sortingHeading = document.getElementById("sort-heading")
@@ -299,6 +300,11 @@ const sortRecipes = (recipesArray) => {
   showRecipes(sortedRecipes)
 }
 
+// pick a random recipe
+const pickARandomRecipe = (recipesArray) => {
+  const randomRecipe = [recipesArray[Math.floor(Math.random() * recipesArray.length)]]
+  showRecipes(randomRecipe)
+}
 
 // show recipes - create a card and add recipe information
 const showRecipes = (recipesArray) => {
@@ -349,6 +355,9 @@ filterOptions.forEach(option => {
 sortingOptions.forEach(option => {
   option.addEventListener("change", () => findSelectedFilters())
 })
+
+// add event listener to the random recipe button
+randomButton.addEventListener("click", () => pickARandomRecipe(RECIPES))
 
 // show all recipes when site is loaded
 document.getElementsByTagName("html")[0].addEventListener("load", showRecipes(RECIPES))

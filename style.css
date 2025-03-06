@@ -111,6 +111,27 @@ label {
   background: #ff6589;
 }
 
+.random-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#random-button {
+  background: #fff7d6;
+  color: #0018A4;
+  font-size: 1em;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 50px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+#random-button:hover {
+  border-color: #0018A4;
+}
+
 #cards-section {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
