@@ -220,41 +220,56 @@ const applyFilters = (selectedFilters) => {
 const filterRecipes = (recipeArray, filter, value) => {
   let filteredRecipes
   // different cases depending on the filter
-  if (filter === 'diets') {
-    // filter on diets
-    filteredRecipes = recipeArray.filter(recipe => (recipe[filter].includes(value)))
-  } else if (filter === 'cuisine') {
-    // filter on cuisine
-    // using .toLowerCase() and .replace(' ', '-') to change eg. 'Middle Eastern' to 'middle-eastern'
-    filteredRecipes = recipeArray.filter(recipe => (recipe[filter].toLowerCase().replace(' ', '-') === value))
-  } else if (filter === 'cookingTime') {
-    // filter on cooking time
-    if (value === 'under-15-min') {
-      filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes < 15))
-    } else if (value === '15-30-min') {
-      filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 15 && recipe.readyInMinutes <= 30))
-    } else if (value === '30-60-min') {
-      filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 30 && recipe.readyInMinutes <= 60))
-    } else if (value === 'over-60-min') {
-      filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes > 60))
-    } else {
-      // display error?
-    }
-  } else if (filter === 'numberOfIngredients') {
-    // filter on number of ingredients
-    if (value === 'under-5-ingredients') {
-      filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length < 5))
-    } else if (value === '5-10-ingredients') {
-      filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length >= 5 && recipe.ingredients.length <= 10))
-    } else if (value === '11-15-ingredients') {
-      filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length >= 11 && recipe.ingredients.length <= 15))
-    } else if (value === 'over-15-ingredients') {
-      filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length > 15))
-    } else {
-      // display error?
-    }
-  } else {
-    // display error?
+  switch (filter) {
+    case 'diets':
+      // filter on diets
+      filteredRecipes = recipeArray.filter(recipe => (recipe[filter].includes(value)))
+      break
+    case 'cuisine':
+      // filter on cuisine
+      // using .toLowerCase() and .replace(' ', '-') to change eg. 'Middle Eastern' to 'middle-eastern'
+      filteredRecipes = recipeArray.filter(recipe => (recipe[filter].toLowerCase().replace(' ', '-') === value))
+      break
+    case 'cookingTime':
+      // filter on cooking time
+      switch (value) {
+        case 'under-15-min':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes < 15))
+          break
+        case '15-30-min':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 15 && recipe.readyInMinutes <= 30))
+          break
+        case '30-60-min':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 30 && recipe.readyInMinutes <= 60))
+          break
+        case 'over-60-min':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes > 60))
+          break
+        default:
+          break
+      }
+      break
+    case 'numberOfIngredients':
+      // filter on number of ingredients
+      switch (value) {
+        case 'under-5-ingredients':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length < 5))
+          break
+        case '5-10-ingredients':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length >= 5 && recipe.ingredients.length <= 10))
+          break
+        case '11-15-ingredients':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length >= 11 && recipe.ingredients.length <= 15))
+          break
+        case 'over-15-ingredients':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length > 15))
+          break
+        default:
+          break
+      }
+      break
+    default:
+      break
   }
   return filteredRecipes
 }
@@ -262,38 +277,65 @@ const filterRecipes = (recipeArray, filter, value) => {
 // sort recipes
 const sortRecipes = (recipesArray) => {
   let sortedRecipes
-  // if sorting s selected - sort recipes array
+  // if a sorting option is selected - sort recipes array
   if (selectedSorting) {
     const sortOn = selectedSorting.split('-')[0]
     const sortingOrder = selectedSorting.split('-')[1]
     // different cases for each sorting option
-    if (sortOn === 'time') {
-      if (sortingOrder === 'ascending') {
-        sortedRecipes = recipesArray.sort((a, b) => (a.readyInMinutes - b.readyInMinutes))
-      } else if (sortingOrder === 'descending') {
-        sortedRecipes = recipesArray.sort((a, b) => (b.readyInMinutes - a.readyInMinutes))
-      }
-    } else if (sortOn === 'popularity') {
-      if (sortingOrder === 'ascending') {
-        sortedRecipes = recipesArray.sort((a, b) => (a.popularity - b.popularity))
-      } else if (sortingOrder === 'descending') {
-        sortedRecipes = recipesArray.sort((a, b) => (b.popularity - a.popularity))
-      }
-    } else if (sortOn === 'price') {
-      if (sortingOrder === 'ascending') {
-        sortedRecipes = recipesArray.sort((a, b) => (a.pricePerServing - b.pricePerServing))
-      } else if (sortingOrder === 'descending') {
-        sortedRecipes = recipesArray.sort((a, b) => (b.pricePerServing - a.pricePerServing))
-      }
-    } else if (sortOn === 'ingredients') {
-      if (sortingOrder === 'ascending') {
-        sortedRecipes = recipesArray.sort((a, b) => (a.ingredients.length - b.ingredients.length))
-      } else if (sortingOrder === 'descending') {
-        sortedRecipes = recipesArray.sort((a, b) => (b.ingredients.length - a.ingredients.length))
-      }
+    switch (sortOn) {
+      case 'time':
+        switch (sortingOrder) {
+          case 'ascending':
+            sortedRecipes = recipesArray.sort((a, b) => (a.readyInMinutes - b.readyInMinutes))
+            break
+          case 'descending':
+            sortedRecipes = recipesArray.sort((a, b) => (b.readyInMinutes - a.readyInMinutes))
+            break
+          default:
+            break
+        }
+        break
+      case 'popularity':
+        switch (sortingOrder) {
+          case 'ascending':
+            sortedRecipes = recipesArray.sort((a, b) => (a.popularity - b.popularity))
+            break
+          case 'descending':
+            sortedRecipes = recipesArray.sort((a, b) => (b.popularity - a.popularity))
+            break
+          default:
+            break
+        }
+        break
+      case 'price':
+        switch (sortingOrder) {
+          case 'ascending':
+            sortedRecipes = recipesArray.sort((a, b) => (a.pricePerServing - b.pricePerServing))
+            break
+          case 'descending':
+            sortedRecipes = recipesArray.sort((a, b) => (b.pricePerServing - a.pricePerServing))
+            break
+          default:
+            break
+        }
+        break
+      case 'ingredients':
+        switch (sortingOrder) {
+          case 'ascending':
+            sortedRecipes = recipesArray.sort((a, b) => (a.ingredients.length - b.ingredients.length))
+            break
+          case 'descending':
+            sortedRecipes = recipesArray.sort((a, b) => (b.ingredients.length - a.ingredients.length))
+            break
+          default:
+            break
+        }
+        break
+      default:
+        break
     }
   } else {
-    // if no sorting is selected - sorted array will be same as filtered array
+    // if no sorting option is selected - sorted array will be same as filtered array
     sortedRecipes = recipesArray
   }
   // show selected recipes
@@ -330,6 +372,10 @@ const showRecipes = (recipesArray) => {
           <hr>
           <div class="details">
             <span>
+              <h3>Diets:</h3>
+              <p>${recipe.diets}</p>
+            </span>
+            <span>
               <h3>Cuisine:</h3>
               <p>${recipe.cuisine}</p>
             </span>
@@ -337,27 +383,32 @@ const showRecipes = (recipesArray) => {
               <h3>Time:</h3>
               <p>${recipe.readyInMinutes} minutes</p>
             </span>
+            <span>
+              <h3>Price per Serving:</h3>
+              <p>${recipe.pricePerServing}</p>
+            </span>
+            <span>
+              <h3>Popularity:</h3>
+              <p>${recipe.popularity}</p>
+            </span>
           </div>
           <hr>
           <div class="ingredients">
-            <h3>Ingredients</h3>
-            <ul></ul> 
+            <h3>Ingredients:</h3>
+            <ul>${createIngredientsList(recipe.ingredients)}</ul> 
           </div>
         </article>
       `
-      // local DOM selector to list the ingredients
-      const ingredientsList = document.getElementsByTagName("UL")[document.getElementsByTagName("UL").length - 1]
-      recipe.ingredients.forEach(ingredient => {
-        ingredientsList.innerHTML += `<li>${ingredient}</li>`
-      })
     })
   }
 }
 
-
-
-
-
+// function to create a list with the recipe ingredients as li elements
+const createIngredientsList = (ingredients) => {
+  let ingredientsList = ''
+  ingredients.forEach((ingredient) => { ingredientsList = ingredientsList.concat(`<li>${ingredient}</li>`) })
+  return ingredientsList
+}
 
 // Add event listeners when filter/sorting options is changed
 filterOptions.forEach(option => {

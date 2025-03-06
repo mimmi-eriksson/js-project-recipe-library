@@ -113,8 +113,11 @@ label {
 
 .random-container {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  column-gap: 20px;
+  row-gap: 12px;
+  margin-top: 1rem;
 }
 
 #random-button {

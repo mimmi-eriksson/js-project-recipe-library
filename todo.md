@@ -1,13 +1,7 @@
-Requirements:
-[X] Have an empty state, e.g. if there are no recipes matching the filter - show a meaningful message to the user
 
-
-If time allows:
-[] change if else to switch?
-[] show more info in the recipes cards:
-  [] diets
-  [] polularity
-  [] price per serving
+[X] show more info in the recipes cards:
+  [X] diets
+  [X] polularity
+  [X] price per serving
 [] add "all" buttons to filters
 [] hide filtering/sorting options when not active OR create dropdowns for each filter/sorting
-[] check input attributes (change value="Over 60 min" to kebab-case?)
