@@ -165,13 +165,13 @@ const cardsContainer = document.getElementById("cards-section")
 const filterOptions = document.querySelectorAll(".filter-option")
 const sortingOptions = document.querySelectorAll(".sorting-option")
 const randomButton = document.getElementById("random-button")
-// const filtersHeading = document.getElementById("filter-heading")
-// const filtersContainer = document.getElementById("filters-container")
-// const sortingHeading = document.getElementById("sort-heading")
-// const sortingContainer = document.getElementById("sorting-container")
+const dropdowns = document.querySelectorAll('.dropdown')
+const resetFiltersButton = document.getElementById('reset-filters-button')
+const resetSortingButton = document.getElementById('reset-sorting-button')
 
 // global variable
 let selectedSorting
+
 
 // loop through the filter/sorting options to check which ones are selected
 const findSelectedFilters = () => {
@@ -421,6 +421,28 @@ sortingOptions.forEach(option => {
 // add event listener to the random recipe button
 randomButton.addEventListener("click", () => pickARandomRecipe(RECIPES))
 
+
+// event listener to toggle dropdowns
+dropdowns.forEach(dropdown => {
+  dropdown.addEventListener('click', () => dropdown.nextElementSibling.classList.toggle('expanded'))
+})
+
+// event listeners to clear filters/sorting
+resetFiltersButton.addEventListener('click', () => {
+  filterOptions.forEach(option => {
+    option.checked = false
+  })
+  findSelectedFilters()
+})
+resetSortingButton.addEventListener('click', () => {
+  sortingOptions.forEach(option => {
+    option.checked = false
+  })
+  selectedSorting = null
+  findSelectedFilters()
+})
+
+
 // show all recipes when site is loaded
 document.getElementsByTagName("html")[0].addEventListener("load", showRecipes(RECIPES))
 
@@ -469,22 +491,6 @@ const checkSelectedSortingOption = () => {
   displaySortingSelection(selectedSortingOption)
 }
 
-// show all filters/sorting options
-const showAll = (container) => {
-  container.classList.add("open")
-  const containerGroups = container.children
-  for (let i = 0; i < containerGroups.length; i++) {
-    containerGroups[i].classList.remove("hidden")
-  }
-}
-// hide all filters/sorting options
-const hideAll = (container) => {
-  container.classList.remove("open")
-  const containerGroups = container.children
-  for (let i = 0; i < containerGroups.length; i++) {
-    containerGroups[i].classList.add("hidden")
-  }
-}
 
 // show only the checked options
 const showCheckedOption = (option, selectedOptions) => {
@@ -506,21 +512,7 @@ const showCheckedOption = (option, selectedOptions) => {
   selectedOptions[0].parentElement.parentElement.parentElement.parentElement.classList.remove("open")
 }
 
-// Listen to when toogle filters/sorting heading is clicked to toogle the options
-filtersHeading.addEventListener("click", () => {
-  if (filtersContainer.classList.contains("open")) {
-    hideAll(filtersContainer)
-  } else {
-    showAll(filtersContainer)
-  }
-})
-sortingHeading.addEventListener("click", () => {
-  if (sortingContainer.classList.contains("open")) {
-    hideAll(sortingContainer)
-  } else {
-    showAll(sortingContainer)
-  }
-})
+
 
 */
 

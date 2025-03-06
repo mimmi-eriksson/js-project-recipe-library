@@ -1,7 +1,5 @@
 
-[X] show more info in the recipes cards:
-  [X] diets
-  [X] polularity
-  [X] price per serving
-[] add "all" buttons to filters
-[] hide filtering/sorting options when not active OR create dropdowns for each filter/sorting
+[X] add "reset" buttons to filters/sorting
+[X] create dropdowns for each filter/sorting to hide/show the options
+[] show filtering/sorting options when active 
+[] change dropdown-icon to up arrow (&#9650) when options are expanded

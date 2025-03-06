@@ -27,7 +27,6 @@ header {
 .options-section h2 {
   font-size: 1.375em;
   font-weight: 700;
-  cursor: pointer;
 }
 
 .options-section h3 {
@@ -42,10 +41,51 @@ header {
   gap: 12px;
 }
 
+.filters-header {
+  display: flex;
+  gap: 12px;
+}
+
+.dropdown {
+  cursor: pointer;
+}
+
+.filter-button {
+  background: #ccffe2;
+  color: #0018A4;
+  font-size: 1em;
+  padding: 8px 16px;
+  border-radius: 50px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  border-color: #0018A4;
+}
+
+.sorting-button {
+  background: #ffecea;
+  color: #0018A4;
+  font-size: 1em;
+  padding: 8px 16px;
+  border-radius: 50px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.sorting-button:hover {
+  color: #FFF;
+  background: #ff6589;
+  border-color: #0018A4;
+}
+
+/* filters/sortings hidden by default */
 .filters-container,
 .sorting-container {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
+  flex-direction: column;
   column-gap: 50px;
   row-gap: 16px;
 }
@@ -56,16 +96,18 @@ header {
   gap: 16px;
 }
 
-.hidden {
-  display: none;
-}
-
+/* filter/sorting options hidden by default */
 .sorting-options,
 .filter-options {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   column-gap: 12px;
   row-gap: 26px;
+}
+
+/* class to show the filter/sorting options */
+.expanded {
+  display: flex;
 }
 
 input[type="checkbox"],
@@ -73,36 +115,10 @@ input[type="radio"] {
   display: none;
 }
 
-label {
-  color: #0018A4;
-  padding: 8px 16px;
-  border-radius: 50px;
-  border: 2px solid transparent;
-  cursor: pointer;
-}
-
-.filter-options label {
-  background: #ccffe2;
-}
-
-.filter-options label:hover {
-  border-color: #0018A4;
-}
-
 /* style label when checkbox is checked */
 .filter-option:checked+label {
   color: #fff;
   background: #0018A4;
-}
-
-.sorting-options label {
-  background: #ffecea;
-}
-
-.sorting-options label:hover {
-  color: #FFF;
-  background: #ff6589;
-  border-color: #0018A4;
 }
 
 /* style label when radio button is checked */
@@ -117,7 +133,7 @@ label {
   align-items: center;
   column-gap: 20px;
   row-gap: 12px;
-  margin-top: 1rem;
+
 }
 
 #random-button {

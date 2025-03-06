@@ -36,17 +36,20 @@
   <section class="options-section">
     <!-- Filter options -->
     <div class="filters">
-      <h2 id="filter-heading">Filters</h2>
-      <div
-        id="filters-container"
-        class="filters-container open"
-      >
-        <!-- Diets -->
-        <div
-          id="diet-filter"
-          class="option-container"
-        >
-          <h3>Diet</h3>
+      <div class="filters-header dropdown">
+        <h2>Filter <span class="dropdown-icon">&#9660</span></h2>
+        <button
+          type="button"
+          id="reset-filters-button"
+          class="filter-button"
+        >Reset filters</button>
+      </div>
+      <div class="filters-container">
+        <!-- Diet -->
+        <div class="option-container">
+          <div class="dropdown">
+            <h3>Diet <span class="dropdown-icon">&#9660</span></h3>
+          </div>
           <div class="filter-options">
             <span>
               <input
@@ -56,7 +59,10 @@
                 id="vegan"
                 value="vegan"
               >
-              <label for="vegan">Vegan</label>
+              <label
+                class="filter-button"
+                for="vegan"
+              >Vegan</label>
             </span>
             <span>
               <input
@@ -66,7 +72,10 @@
                 id="vegetarian"
                 value="vegetarian"
               >
-              <label for="vegetarian">Vegetarian</label>
+              <label
+                class="filter-button"
+                for="vegetarian"
+              >Vegetarian</label>
             </span>
             <span>
               <input
@@ -76,7 +85,10 @@
                 id="gluten-free"
                 value="gluten-free"
               >
-              <label for="gluten-free">Gluten-free</label>
+              <label
+                class="filter-button"
+                for="gluten-free"
+              >Gluten-free</label>
             </span>
             <span>
               <input
@@ -86,16 +98,18 @@
                 id="dairy-free"
                 value="dairy-free"
               >
-              <label for="dairy-free">Dairy-free</label>
+              <label
+                class="filter-button"
+                for="dairy-free"
+              >Dairy-free</label>
             </span>
           </div>
         </div>
         <!-- Cuisine -->
-        <div
-          id="cuisine-filter"
-          class="option-container"
-        >
-          <h3>Cuisine</h3>
+        <div class="option-container">
+          <div class="dropdown">
+            <h3>Cuisine <span class="dropdown-icon">&#9660</span></h3>
+          </div>
           <div class="filter-options">
             <span>
               <input
@@ -105,7 +119,10 @@
                 id="mediterranean"
                 value="mediterranean"
               >
-              <label for="mediterranean">Mediterranean</label>
+              <label
+                class="filter-button"
+                for="mediterranean"
+              >Mediterranean</label>
             </span>
             <span>
               <input
@@ -115,7 +132,10 @@
                 id="middle-eastern"
                 value="middle-eastern"
               >
-              <label for="middle-eastern">Middle Eastern</label>
+              <label
+                class="filter-button"
+                for="middle-eastern"
+              >Middle Eastern</label>
             </span>
             <span>
               <input
@@ -125,7 +145,10 @@
                 id="asian"
                 value="asian"
               >
-              <label for="asian">Asian</label>
+              <label
+                class="filter-button"
+                for="asian"
+              >Asian</label>
             </span>
             <span>
               <input
@@ -135,7 +158,10 @@
                 id="italian"
                 value="italian"
               >
-              <label for="italian">Italian</label>
+              <label
+                class="filter-button"
+                for="italian"
+              >Italian</label>
             </span>
             <span>
               <input
@@ -145,16 +171,18 @@
                 id="mexican"
                 value="mexican"
               >
-              <label for="mexican">Mexican</label>
+              <label
+                class="filter-button"
+                for="mexican"
+              >Mexican</label>
             </span>
           </div>
         </div>
         <!-- Cooking time -->
-        <div
-          id="time-filter"
-          class="option-container"
-        >
-          <h3>Cooking Time</h3>
+        <div class="option-container">
+          <div class="dropdown">
+            <h3>Cooking Time <span class="dropdown-icon">&#9660</span></h3>
+          </div>
           <div class="filter-options">
             <span>
               <input
@@ -164,7 +192,10 @@
                 id="under-15-min"
                 value="under-15-min"
               >
-              <label for="under-15-min">Under 15 min</label>
+              <label
+                class="filter-button"
+                for="under-15-min"
+              >Under 15 min</label>
             </span>
             <span>
               <input
@@ -174,7 +205,10 @@
                 id="15-30-min"
                 value="15-30-min"
               >
-              <label for="15-30-min">15-30 min</label>
+              <label
+                class="filter-button"
+                for="15-30-min"
+              >15-30 min</label>
             </span>
             <span>
               <input
@@ -184,7 +218,10 @@
                 id="30-60-min"
                 value="30-60-min"
               >
-              <label for="30-60-min">30-60 min</label>
+              <label
+                class="filter-button"
+                for="30-60-min"
+              >30-60 min</label>
             </span>
             <span>
               <input
@@ -194,16 +231,18 @@
                 id="over-60-min"
                 value="over-60-min"
               >
-              <label for="over-60-min">Over 60 min</label>
+              <label
+                class="filter-button"
+                for="over-60-min"
+              >Over 60 min</label>
             </span>
           </div>
         </div>
         <!-- Amount of ingredients -->
-        <div
-          id="ingredients-filter"
-          class="option-container"
-        >
-          <h3>Amount of Ingredients</h3>
+        <div class="option-container">
+          <div class="dropdown">
+            <h3>Amount of Ingredients <span class="dropdown-icon">&#9660</span></h3>
+          </div>
           <div class="filter-options">
             <span>
               <input
@@ -213,7 +252,10 @@
                 id="under-5-ingredients"
                 value="under-5-ingredients"
               >
-              <label for="under-5-ingredients">Under 5 ingredients</label>
+              <label
+                class="filter-button"
+                for="under-5-ingredients"
+              >Under 5 ingredients</label>
             </span>
             <span>
               <input
@@ -223,7 +265,10 @@
                 id="5-10-ingredients"
                 value="5-10-ingredients"
               >
-              <label for="5-10-ingredients">5-10 ingredients</label>
+              <label
+                class="filter-button"
+                for="5-10-ingredients"
+              >5-10 ingredients</label>
             </span>
             <span>
               <input
@@ -233,7 +278,10 @@
                 id="11-15-ingredients"
                 value="11-15-ingredients"
               >
-              <label for="11-15-ingredients">11-15 ingredients</label>
+              <label
+                class="filter-button"
+                for="11-15-ingredients"
+              >11-15 ingredients</label>
             </span>
             <span>
               <input
@@ -243,7 +291,10 @@
                 id="over-15-ingredients"
                 value="over-15-ingredients"
               >
-              <label for="over-15-ingredients">Over 15 ingredients</label>
+              <label
+                class="filter-button"
+                for="over-15-ingredients"
+              >Over 15 ingredients</label>
             </span>
           </div>
         </div>
@@ -252,17 +303,20 @@
 
     <!-- Sorting options -->
     <div class="sorting">
-      <h2 id="sort-heading">Sorting Options</h2>
-      <div
-        id="sorting-container"
-        class="sorting-container open"
-      >
+      <div class="filters-header dropdown">
+        <h2>Sort <span class="dropdown-icon">&#9660</span></h2>
+        <button
+          type="button"
+          id="reset-sorting-button"
+          class="sorting-button"
+        >Reset sorting</button>
+      </div>
+      <div class="sorting-container">
         <!-- Cooking time -->
-        <div
-          id="time-sorting"
-          class="option-container"
-        >
-          <h3>Cooking Time</h3>
+        <div class="option-container">
+          <div class="dropdown">
+            <h3>Cooking Time <span class="dropdown-icon">&#9660</span></h3>
+          </div>
           <div class="sorting-options">
             <span>
               <input
@@ -272,7 +326,10 @@
                 id="time-descending"
                 value="time-descending"
               >
-              <label for="time-descending">Descending</label>
+              <label
+                class="sorting-button"
+                for="time-descending"
+              >Descending</label>
             </span>
             <span>
               <input
@@ -282,17 +339,18 @@
                 id="time-ascending"
                 value="time-ascending"
               >
-              <label for="time-ascending">Ascending</label>
+              <label
+                class="sorting-button"
+                for="time-ascending"
+              >Ascending</label>
             </span>
           </div>
-
         </div>
         <!-- Popularity -->
-        <div
-          id="popularity-sorting"
-          class="option-container"
-        >
-          <h3>Popularity</h3>
+        <div class="option-container">
+          <div class="dropdown">
+            <h3>Popularity <span class="dropdown-icon">&#9660</span></h3>
+          </div>
           <div class="sorting-options">
             <span>
               <input
@@ -302,7 +360,10 @@
                 id="popularity-descending"
                 value="popularity-descending"
               >
-              <label for="popularity-descending">Descending</label>
+              <label
+                class="sorting-button"
+                for="popularity-descending"
+              >Descending</label>
             </span>
             <span>
               <input
@@ -312,17 +373,18 @@
                 id="popularity-ascending"
                 value="popularity-ascending"
               >
-              <label for="popularity-ascending">Ascending</label>
+              <label
+                class="sorting-button"
+                for="popularity-ascending"
+              >Ascending</label>
             </span>
           </div>
-
         </div>
         <!-- Price per Serving -->
-        <div
-          id="price-sorting"
-          class="option-container"
-        >
-          <h3>Price per Serving</h3>
+        <div class="option-container">
+          <div class="dropdown">
+            <h3>Price per Serving <span class="dropdown-icon">&#9660</span></h3>
+          </div>
           <div class="sorting-options">
             <span>
               <input
@@ -332,7 +394,10 @@
                 id="price-descending"
                 value="price-descending"
               >
-              <label for="price-descending">Descending</label>
+              <label
+                class="sorting-button"
+                for="price-descending"
+              >Descending</label>
             </span>
             <span>
               <input
@@ -342,17 +407,18 @@
                 id="price-ascending"
                 value="price-ascending"
               >
-              <label for="price-ascending">Ascending</label>
+              <label
+                class="sorting-button"
+                for="price-ascending"
+              >Ascending</label>
             </span>
           </div>
-
         </div>
         <!-- Amount of Ingredients -->
-        <div
-          id="ingredients-sorting"
-          class="option-container"
-        >
-          <h3>Amount of Ingredients</h3>
+        <div class="option-container">
+          <div class="dropdown">
+            <h3>Amount of Ingredients <span class="dropdown-icon">&#9660</span></h3>
+          </div>
           <div class="sorting-options">
             <span>
               <input
@@ -362,7 +428,10 @@
                 id="ingredients-descending"
                 value="ingredients-descending"
               >
-              <label for="ingredients-descending">Descending</label>
+              <label
+                class="sorting-button"
+                for="ingredients-descending"
+              >Descending</label>
             </span>
             <span>
               <input
@@ -372,10 +441,12 @@
                 id="ingredients-ascending"
                 value="ingredients-ascending"
               >
-              <label for="ingredients-ascending">Ascending</label>
+              <label
+                class="sorting-button"
+                for="ingredients-ascending"
+              >Ascending</label>
             </span>
           </div>
-
         </div>
       </div>
     </div>
