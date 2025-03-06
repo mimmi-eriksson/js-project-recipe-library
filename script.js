@@ -172,7 +172,6 @@ const resetSortingButton = document.getElementById('reset-sorting-button')
 // global variable
 let selectedSorting
 
-
 // loop through the filter/sorting options to check which ones are selected
 const findSelectedFilters = () => {
   // variables to save the selections
@@ -410,30 +409,28 @@ const createIngredientsList = (ingredients) => {
   return ingredientsList
 }
 
-// Add event listeners when filter/sorting options is changed
+// event listeners
+// filter/sorting options is changed (checked/unchecked by user)
 filterOptions.forEach(option => {
   option.addEventListener("change", () => findSelectedFilters())
 })
 sortingOptions.forEach(option => {
   option.addEventListener("change", () => findSelectedFilters())
 })
-
-// add event listener to the random recipe button
+// random recipe button is clicked
 randomButton.addEventListener("click", () => pickARandomRecipe(RECIPES))
-
-
-// event listener to toggle dropdowns
+// toggle dropdowns
 dropdowns.forEach(dropdown => {
   dropdown.addEventListener('click', () => dropdown.nextElementSibling.classList.toggle('expanded'))
 })
-
-// event listeners to clear filters/sorting
+// reset filters buttons is clicked
 resetFiltersButton.addEventListener('click', () => {
   filterOptions.forEach(option => {
     option.checked = false
   })
   findSelectedFilters()
 })
+// reset sorting buttons is clicked
 resetSortingButton.addEventListener('click', () => {
   sortingOptions.forEach(option => {
     option.checked = false
@@ -442,81 +439,6 @@ resetSortingButton.addEventListener('click', () => {
   findSelectedFilters()
 })
 
-
 // show all recipes when site is loaded
 document.getElementsByTagName("html")[0].addEventListener("load", showRecipes(RECIPES))
-
-
-
-
-/*
-
-// check which filters are selected (checked)
-const checkSelectedFilters = () => {
-  let selectedFiltersList = []
-  let selectedFiltersObject = {
-    diet: [],
-    cuisine: [],
-    cookingTime: [],
-    numberOfIngredients: []
-  }
-  // loop through filter options
-  Object.keys(selectedFiltersObject).forEach(key => {
-    filterOptions.forEach((filterOption) => {
-      if ((filterOption.name === key) && (filterOption.checked)) {
-        selectedFiltersObject[key].push(filterOption.value)
-        selectedFiltersList.push(filterOption)
-      }
-    })
-  })
-  // only show the selected filter options
-  showCheckedOption("filter", selectedFiltersList)
-  // display filters selection
-  displaySelectedFilters(selectedFiltersObject)
-}
-
-// check which sorting option is selected
-const checkSelectedSortingOption = () => {
-  let selectedSortingOption
-  // loop thought the sorting options
-  sortingOptions.forEach((sortingOption) => {
-    if (sortingOption.checked) {
-      selectedSortingOption = sortingOption
-    }
-  })
-  // only show the selected sorting option
-  const selectedSortingOptionArray = new Array(selectedSortingOption)
-  showCheckedOption("sorting", selectedSortingOptionArray)
-  // display sorting selection
-  displaySortingSelection(selectedSortingOption)
-}
-
-
-// show only the checked options
-const showCheckedOption = (option, selectedOptions) => {
-  let optionsList
-  if (option === "sorting") {
-    optionsList = sortingOptions
-  } else {
-    optionsList = filterOptions
-  }
-  // loop thought the options and hide all
-  optionsList.forEach((sortingOption) => {
-    sortingOption.parentElement.parentElement.parentElement.classList.add("hidden")
-  })
-  // show the selected option groups
-  for (let i = 0; i < selectedOptions.length; i++) {
-    selectedOptions[i].parentElement.parentElement.parentElement.classList.remove("hidden")
-  }
-  // remove open class on the main container
-  selectedOptions[0].parentElement.parentElement.parentElement.parentElement.classList.remove("open")
-}
-
-
-
-*/
-
-
-
-
 
