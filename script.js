@@ -170,7 +170,7 @@ const resetFiltersButton = document.getElementById('reset-filters-button')
 const resetSortingButton = document.getElementById('reset-sorting-button')
 
 // global variable
-let selectedSorting
+let selectedSorting = null
 
 // loop through the filter/sorting options to check which ones are selected
 const findSelectedFilters = () => {
@@ -334,8 +334,8 @@ const sortRecipes = (recipesArray) => {
         break
     }
   } else {
-    // if no sorting option is selected - sorted array will be same as filtered array
-    sortedRecipes = recipesArray
+    // if no sorting option is selected - sort array on recipe id
+    sortedRecipes = recipesArray.sort((a, b) => (a.id - b.id))
   }
   // show selected recipes
   showRecipes(sortedRecipes)
