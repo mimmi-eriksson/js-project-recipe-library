@@ -169,10 +169,20 @@ const dropdowns = document.querySelectorAll('.dropdown')
 const resetFiltersButton = document.getElementById('reset-filters-button')
 const resetSortingButton = document.getElementById('reset-sorting-button')
 
-// global variable
-let selectedSorting = null
+// function to run when a filter/sorting option is changed 
+const renderRecipes = () => {
+  // check which filters/sorting are selected
+  const selectedFilters = findSelectedFilters()
+  const selectedSorting = findSelectedSorting()
+  // filter recipes
+  const filteredRecipes = applyFilters(selectedFilters)
+  // sort recipes
+  const sortedRecipes = sortRecipes(filteredRecipes, selectedSorting)
+  // show recipes
+  showRecipes(sortedRecipes)
+}
 
-// loop through the filter/sorting options to check which ones are selected
+// loop through the filter options to check which ones are selected
 const findSelectedFilters = () => {
   // variables to save the selections
   let selectedFilters = {
@@ -185,16 +195,21 @@ const findSelectedFilters = () => {
   filterOptions.forEach(option => {
     (option.checked ? selectedFilters[option.name].push(option.id) : null)
   })
+  return selectedFilters
+}
+
+// loop through sorting options to check which one is selected
+const findSelectedSorting = () => {
+  let selectedSorting = null
   // if radio is checked add id to sorting varaible
   sortingOptions.forEach(option => {
     (option.checked ? selectedSorting = option.id : null)
   })
-  // filter and sort recipes based on selection
-  applyFilters(selectedFilters)
-
+  return selectedSorting
 }
 
-// apply filters
+
+// apply selcted filters
 const applyFilters = (selectedFilters) => {
   // if no filters are selected - filteredRecipes will be all recipes
   let filteredRecipes = RECIPES
@@ -211,8 +226,7 @@ const applyFilters = (selectedFilters) => {
       filteredRecipes = matchingRecipes
     }
   }
-  // sort filtered recipes
-  sortRecipes(filteredRecipes)
+  return filteredRecipes
 }
 
 // filter recipes
@@ -273,13 +287,13 @@ const filterRecipes = (recipeArray, filter, value) => {
   return filteredRecipes
 }
 
-// sort recipes
-const sortRecipes = (recipesArray) => {
+// sort recipes function
+const sortRecipes = (recipesArray, sortingOption) => {
   let sortedRecipes
   // if a sorting option is selected - sort recipes array
-  if (selectedSorting) {
-    const sortOn = selectedSorting.split('-')[0]
-    const sortingOrder = selectedSorting.split('-')[1]
+  if (sortingOption) {
+    const sortOn = sortingOption.split('-')[0]
+    const sortingOrder = sortingOption.split('-')[1]
     // different cases for each sorting option
     switch (sortOn) {
       case 'time':
@@ -337,8 +351,7 @@ const sortRecipes = (recipesArray) => {
     // if no sorting option is selected - sort array on recipe id
     sortedRecipes = recipesArray.sort((a, b) => (a.id - b.id))
   }
-  // show selected recipes
-  showRecipes(sortedRecipes)
+  return sortedRecipes
 }
 
 // pick a random recipe
@@ -372,7 +385,7 @@ const showRecipes = (recipesArray) => {
           <div class="details">
             <span>
               <h3>Diets:</h3>
-              <p>${recipe.diets}</p>
+              <p>${recipe.diets.join(', ')}</p>
             </span>
             <span>
               <h3>Cuisine:</h3>
@@ -394,7 +407,7 @@ const showRecipes = (recipesArray) => {
           <hr>
           <div class="ingredients">
             <h3>Ingredients:</h3>
-            <ul>${createIngredientsList(recipe.ingredients)}</ul> 
+            <ul>${recipe.ingredients.map((ingredient) => `<li>${ingredient}</li>`).join('')}</ul> 
           </div>
         </article>
       `
@@ -402,41 +415,40 @@ const showRecipes = (recipesArray) => {
   }
 }
 
-// function to create a list with the recipe ingredients as li elements
-const createIngredientsList = (ingredients) => {
-  let ingredientsList = ''
-  ingredients.forEach((ingredient) => { ingredientsList = ingredientsList.concat(`<li>${ingredient}</li>`) })
-  return ingredientsList
-}
-
 // event listeners
 // filter/sorting options is changed (checked/unchecked by user)
 filterOptions.forEach(option => {
-  option.addEventListener("change", () => findSelectedFilters())
+  option.addEventListener("change", () => renderRecipes())
 })
 sortingOptions.forEach(option => {
-  option.addEventListener("change", () => findSelectedFilters())
+  option.addEventListener("change", () => renderRecipes())
 })
 // random recipe button is clicked
 randomButton.addEventListener("click", () => pickARandomRecipe(RECIPES))
 // toggle dropdowns
 dropdowns.forEach(dropdown => {
-  dropdown.addEventListener('click', () => dropdown.nextElementSibling.classList.toggle('expanded'))
+  dropdown.addEventListener('click', () => {
+    // show/hide options
+    dropdown.nextElementSibling.classList.toggle('expanded')
+    // change dropdown-icon
+    dropdown.nextElementSibling.classList.contains('expanded')
+      ? dropdown.querySelector('.dropdown-icon').innerHTML = '&#9650'
+      : dropdown.querySelector('.dropdown-icon').innerHTML = '&#9660'
+  })
 })
 // reset filters buttons is clicked
 resetFiltersButton.addEventListener('click', () => {
   filterOptions.forEach(option => {
     option.checked = false
   })
-  findSelectedFilters()
+  renderRecipes()
 })
 // reset sorting buttons is clicked
 resetSortingButton.addEventListener('click', () => {
   sortingOptions.forEach(option => {
     option.checked = false
   })
-  selectedSorting = null
-  findSelectedFilters()
+  renderRecipes()
 })
 
 // show all recipes when site is loaded
