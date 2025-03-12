@@ -160,6 +160,10 @@ input[type="radio"] {
   margin: 5vh 0;
 }
 
+.results-count {
+  grid-column: 1/-1;
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -212,14 +216,14 @@ input[type="radio"] {
   list-style: none;
 }
 
-.loading-placeholder {
+.placeholder {
   grid-column: 1/-1;
   align-items: center;
 }
 
 .loader {
   border: 5px solid #f3f3f3;
-  border-top: 5px solid #585858;
+  border-top: 5px solid #0018A4;
   border-radius: 50%;
   width: 50px;
   height: 50px;

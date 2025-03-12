@@ -1,165 +1,3 @@
-// const RECIPES = [
-//   {
-//     id: 1,
-//     title: "Vegan Lentil Soup",
-//     image: "./placeholder-image.png",
-//     readyInMinutes: 30,
-//     servings: 4,
-//     sourceUrl: "https://example.com/vegan-lentil-soup",
-//     diets: ["vegan"],
-//     cuisine: "Mediterranean",
-//     ingredients: [
-//       "red lentils",
-//       "carrots",
-//       "onion",
-//       "garlic",
-//       "tomato paste",
-//       "cumin",
-//       "paprika",
-//       "vegetable broth",
-//       "olive oil",
-//       "salt"
-//     ],
-//     pricePerServing: 2.5,
-//     popularity: 85
-//   },
-//   {
-//     id: 2,
-//     title: "Vegetarian Pesto Pasta",
-//     image: "./placeholder-image.png",
-//     readyInMinutes: 25,
-//     servings: 2,
-//     sourceUrl: "https://example.com/vegetarian-pesto-pasta",
-//     diets: ["vegetarian"],
-//     cuisine: "Italian",
-//     ingredients: [
-//       "pasta",
-//       "basil",
-//       "parmesan cheese",
-//       "garlic",
-//       "pine nuts",
-//       "olive oil",
-//       "salt",
-//       "black pepper"
-//     ],
-//     pricePerServing: 3.0,
-//     popularity: 92
-//   },
-//   {
-//     id: 3,
-//     title: "Gluten-Free Chicken Stir-Fry",
-//     image: "./placeholder-image.png",
-//     readyInMinutes: 20,
-//     servings: 3,
-//     sourceUrl: "https://example.com/gluten-free-chicken-stir-fry",
-//     diets: ["gluten-free"],
-//     cuisine: "Asian",
-//     ingredients: [
-//       "chicken breast",
-//       "broccoli",
-//       "bell pepper",
-//       "carrot",
-//       "soy sauce (gluten-free)",
-//       "ginger",
-//       "garlic",
-//       "sesame oil",
-//       "cornstarch",
-//       "green onion",
-//       "sesame seeds",
-//       "rice"
-//     ],
-//     pricePerServing: 4.0,
-//     popularity: 78
-//   },
-//   {
-//     id: 4,
-//     title: "Dairy-Free Tacos",
-//     image: "./placeholder-image.png",
-//     readyInMinutes: 15,
-//     servings: 2,
-//     sourceUrl: "https://example.com/dairy-free-tacos",
-//     diets: ["dairy-free"],
-//     cuisine: "Mexican",
-//     ingredients: [
-//       "corn tortillas",
-//       "ground beef",
-//       "taco seasoning",
-//       "lettuce",
-//       "tomato",
-//       "avocado"
-//     ],
-//     pricePerServing: 2.8,
-//     popularity: 88
-//   },
-//   {
-//     id: 5,
-//     title: "Middle Eastern Hummus",
-//     image: "./placeholder-image.png",
-//     readyInMinutes: 10,
-//     servings: 4,
-//     sourceUrl: "https://example.com/middle-eastern-hummus",
-//     diets: ["vegan", "gluten-free"],
-//     cuisine: "Middle Eastern",
-//     ingredients: [
-//       "chickpeas",
-//       "tahini",
-//       "garlic",
-//       "lemon juice",
-//       "olive oil"
-//     ],
-//     pricePerServing: 1.5,
-//     popularity: 95
-//   },
-//   {
-//     id: 6,
-//     title: "Quick Avocado Toast",
-//     image: "./placeholder-image.png",
-//     readyInMinutes: 5,
-//     servings: 1,
-//     sourceUrl: "https://example.com/quick-avocado-toast",
-//     diets: ["vegan"],
-//     cuisine: "Mediterranean",
-//     ingredients: [
-//       "bread",
-//       "avocado",
-//       "lemon juice",
-//       "salt"
-//     ],
-//     pricePerServing: 2.0,
-//     popularity: 90
-//   },
-//   {
-//     id: 7,
-//     title: "Beef Stew",
-//     image: "./placeholder-image.png",
-//     readyInMinutes: 90,
-//     servings: 5,
-//     sourceUrl: "https://example.com/beef-stew",
-//     diets: [],
-//     cuisine: "European",
-//     ingredients: [
-//       "beef chunks",
-//       "potatoes",
-//       "carrots",
-//       "onion",
-//       "garlic",
-//       "tomato paste",
-//       "beef broth",
-//       "red wine",
-//       "bay leaves",
-//       "thyme",
-//       "salt",
-//       "black pepper",
-//       "butter",
-//       "flour",
-//       "celery",
-//       "mushrooms"
-//     ],
-//     pricePerServing: 5.5,
-//     popularity: 80
-//   }
-// ]
-
 // DOM selectors
 const cardsContainer = document.getElementById("cards-section")
 const filterOptions = document.querySelectorAll(".filter-option")
@@ -173,10 +11,7 @@ const resetSortingButton = document.getElementById('reset-sorting-button')
 const BASE_URL = 'https://api.spoonacular.com/recipes/random'
 const API_KEY = 'cff3c1af29a94a72bf19a8b99732e061'
 const URL = `${BASE_URL}?apiKey=${API_KEY}&number=100`
-
 let fetchedRecipes = []
-
-
 
 // saved recipes from a fetch to play around with
 const exampleRecipes = [
@@ -13727,9 +13562,7 @@ const exampleRecipes = [
     "spoonacularSourceUrl": "https://spoonacular.com/instant-pot-chicken-taco-soup-982382"
   }
 ]
-// fetchedRecipes = storedRecipes.recipes
-
-
+// fetchedRecipes = exampleRecipes
 
 // fetch data from api
 const fetchData = async () => {
@@ -13755,7 +13588,6 @@ const fetchData = async () => {
   } catch (error) {
     console.error('error: ', error.message)
   }
-
 }
 
 // function to run when a filter/sorting option is changed 
@@ -13957,12 +13789,13 @@ const showRecipes = (recipesArray) => {
     // display a message to the user
     cardsContainer.innerHTML +=
       `
-    <article class="card">
+    <article class="card placeholder">
       <h2>No recipes matching the selected filters</h2>
     </article>
     `
   } else {
     // display recipes in array
+    cardsContainer.innerHTML += `<div class="results-count"><p>${recipesArray.length} recipes</p></div>`
     recipesArray.forEach(recipe => {
       cardsContainer.innerHTML +=
         `
@@ -13973,7 +13806,7 @@ const showRecipes = (recipesArray) => {
             <div class="details">
               <span>
               <h3>Diets:</h3>
-                <p>${recipe.diets.length > 0 ? recipe.diets.join(', ') : 'none'}</p>
+                <p>${recipe.diets.join(', ')}</p>
               </span>
               <span>
                 <h3>Cuisines:</h3>

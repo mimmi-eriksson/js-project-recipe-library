@@ -1,7 +1,7 @@
 Focus on / requirements:
 [] Show a useful message to the user in case the daily quota has been reached
 [] Implement local storage caching to reduce API requests
-[X] Show a loading state while fetching data
+
 
 
 Strech goals (pick at least one below):
@@ -17,11 +17,7 @@ If time allows:
 [] display a text with how many recipes are showing
 
 
-Notes:
-key differences mockup data -> api data:
-* cuisine -> cuisines
-* popularity -> spoonacularScore
-* ingredients -> extendedIngredients.amout extendedIngredients.name extendedIngredients.unit
+
 
 
 
