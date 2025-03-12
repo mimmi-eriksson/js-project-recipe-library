@@ -199,7 +199,6 @@ input[type="radio"] {
 
 .details span {
   display: flex;
-  align-items: center;
   gap: 4px;
 }
 
