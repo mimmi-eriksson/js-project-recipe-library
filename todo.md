@@ -1,6 +1,8 @@
 Focus on / requirements:
 [] Show a useful message to the user in case the daily quota has been reached
 [] Implement local storage caching to reduce API requests
+[X] adding a link with source url to recipe title and image
+[X] added buttons to switch between showing ingredients and instructions
 
 
 
@@ -13,12 +15,4 @@ Strech goals (pick at least one below):
 
 If time allows:
 [] show filtering/sorting options when active 
-[] add <a> tag with source url to the recipe cards
-[] display a text with how many recipes are showing
-
-
-
-
-
-
 

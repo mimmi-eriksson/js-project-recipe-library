@@ -13576,7 +13576,7 @@ const fetchData = async () => {
     console.log('data: ', data)
 
     const validRecipes = data.recipes.filter(recipe => {
-      return recipe.title && recipe.image && recipe.imageType && recipe.diets.length > 0 && recipe.cuisines.length > 0 && recipe.readyInMinutes && recipe.spoonacularScore
+      return recipe.title && recipe.image && recipe.imageType && recipe.diets.length > 0 && recipe.cuisines.length > 0 && recipe.readyInMinutes && recipe.spoonacularScore && recipe.instructions.startsWith('<ol>')
     })
 
     console.log('valid recipes: ', validRecipes)
@@ -13800,36 +13800,50 @@ const showRecipes = (recipesArray) => {
       cardsContainer.innerHTML +=
         `
         <article class="card">
+          <a href="${recipe.sourceUrl}" target="_blank">
             <img src="${recipe.image}" alt="${recipe.title}">
             <h2>${recipe.title}</h2>
-            <hr>
-            <div class="details">
-              <span>
-              <h3>Diets:</h3>
-                <p>${recipe.diets.join(', ')}</p>
-              </span>
-              <span>
-                <h3>Cuisines:</h3>
-                <p>${recipe.cuisines.join(', ')}</p>
-              </span>
-              <span>
-                <h3>Time:</h3>
-                <p>${recipe.readyInMinutes} minutes</p>
-              </span>
-              <span>
-                <h3>Price:</h3>
-                <p>$${(recipe.pricePerServing / 100).toPrecision(2)} per serving</p>
-              </span>
-              <span>
-                <h3>Popularity:</h3>
-                <p>${Math.round(recipe.spoonacularScore)}</p>
-              </span>
+          </a>
+          <hr>
+          <div class="information">
+            <span>
+            <h3>Diets:</h3>
+              <p>${recipe.diets.join(', ')}</p>
+            </span>
+            <span>
+              <h3>Cuisines:</h3>
+              <p>${recipe.cuisines.join(', ')}</p>
+            </span>
+            <span>
+              <h3>Time:</h3>
+              <p>${recipe.readyInMinutes} minutes</p>
+            </span>
+            <span>
+              <h3>Price:</h3>
+              <p>$${(recipe.pricePerServing / 100).toPrecision(2)} per serving</p>
+            </span>
+            <span>
+              <h3>Popularity:</h3>
+              <p>${Math.round(recipe.spoonacularScore)}</p>
+            </span>
+          </div>
+          <hr>
+          <div class="details">
+            <div class="details-buttons-container">
+              <button type="button" class="details-button checked">
+                Ingredients
+              </button>
+              <button type="button" class="details-button">
+                Instructions
+              </button>
             </div>
-            <hr>
             <div class="ingredients">
-              <h3>Ingredients:</h3>
-              <ul>${recipe.extendedIngredients.map((ingredient) => `<li>${ingredient.amount} ${ingredient.unit} ${ingredient.name}</li>`).join('')}</ul> 
+              <ul>${recipe.extendedIngredients.map((ingredient) => `<li>${ingredient.amount} ${ingredient.unit} ${ingredient.name}</li>`).join('')}</ul>
             </div>
+            <div class="instructions">
+              ${recipe.instructions}
+            </div>
+          </div>
         </article>
       `
     })
