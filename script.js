@@ -5368,10 +5368,10 @@ const sortRecipes = (recipesArray, sortingOption) => {
       case 'popularity':
         switch (sortingOrder) {
           case 'ascending':
-            sortedRecipes = recipesArray.sort((a, b) => (a.popularity - b.popularity))
+            sortedRecipes = recipesArray.sort((a, b) => (a.spoonacularScore - b.spoonacularScore))
             break
           case 'descending':
-            sortedRecipes = recipesArray.sort((a, b) => (b.popularity - a.popularity))
+            sortedRecipes = recipesArray.sort((a, b) => (b.spoonacularScore - a.spoonacularScore))
             break
           default:
             break
@@ -5392,10 +5392,10 @@ const sortRecipes = (recipesArray, sortingOption) => {
       case 'ingredients':
         switch (sortingOrder) {
           case 'ascending':
-            sortedRecipes = recipesArray.sort((a, b) => (a.ingredients.length - b.ingredients.length))
+            sortedRecipes = recipesArray.sort((a, b) => (a.extendedIngredients.length - b.extendedIngredients.length))
             break
           case 'descending':
-            sortedRecipes = recipesArray.sort((a, b) => (b.ingredients.length - a.ingredients.length))
+            sortedRecipes = recipesArray.sort((a, b) => (b.extendedIngredients.length - a.extendedIngredients.length))
             break
           default:
             break

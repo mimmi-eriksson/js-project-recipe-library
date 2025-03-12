@@ -1,10 +1,7 @@
 Focus on / requirements:
-[X] adjust filter function to work with api data
-[] adjust sort function to work with api data
-  [] time
-  [] popularity
-  [] price
-  [] ingredients
+[X] adjust sort function to work with api data
+[] adjust random recipe function to work with api data
+
 
 If time allows:
 [] show filtering/sorting options when active 
