@@ -1,9 +1,8 @@
 Focus on / requirements:
-[X] adjust random recipe function to work with api data
-[X] filter out recipes without information i'm interested in fetchedRecipes
 [] Show a useful message to the user in case the daily quota has been reached
 [] Implement local storage caching to reduce API requests
-[] Show a loading state while fetching data
+[X] Show a loading state while fetching data
+
 
 Strech goals (pick at least one below):
 [] Implement a feature so that the user will be able to see the instructions/steps, for example when clicking a button.

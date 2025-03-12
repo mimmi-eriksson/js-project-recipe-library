@@ -13984,8 +13984,8 @@ const showRecipes = (recipesArray) => {
                 <p>${recipe.readyInMinutes} minutes</p>
               </span>
               <span>
-                <h3>Price per Serving:</h3>
-                <p>$${(recipe.pricePerServing / 100).toPrecision(2)}</p>
+                <h3>Price:</h3>
+                <p>$${(recipe.pricePerServing / 100).toPrecision(2)} per serving</p>
               </span>
               <span>
                 <h3>Popularity:</h3>
