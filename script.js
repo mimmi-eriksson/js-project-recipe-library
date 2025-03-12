@@ -1405,7 +1405,7 @@ const storedRecipes = {
         }
       ],
       "summary": "Need a <b>gluten free and lacto ovo vegetarian hor d'oeuvre</b>? Strawberry-Mango Quinoa Salad could be an awesome recipe to try. This recipe serves 4. One serving contains <b>354 calories</b>, <b>8g of protein</b>, and <b>17g of fat</b>. For <b>$1.87 per serving</b>, this recipe <b>covers 21%</b> of your daily requirements of vitamins and minerals. 41 person were impressed by this recipe. This recipe from Foodista requires cucumber, cream, mango, and strawberries. From preparation to the plate, this recipe takes about <b>45 minutes</b>. All things considered, we decided this recipe <b>deserves a spoonacular score of 97%</b>. This score is tremendous. Similar recipes are <a href=\"https://spoonacular.com/recipes/strawberry-mango-quinoa-salad-1578467\">Strawberry-Mango Quinoa Salad</a>, <a href=\"https://spoonacular.com/recipes/strawberry-mango-quinoa-salad-1588251\">Strawberry-Mango Quinoa Salad</a>, and <a href=\"https://spoonacular.com/recipes/strawberry-mango-chopped-spinach-quinoa-salad-with-sesame-lime-vinaigrette-1469287\">Strawberry & Mango Chopped Spinach Quinoa Salad with Sesame-Lime Vinaigrette</a>.",
-      "cuisines": [],
+      "cuisines": ["Middle Eastern"],
       "dishTypes": [
         "side dish",
         "antipasti",
@@ -5227,11 +5227,15 @@ const fetchData = async () => {
 const renderRecipes = () => {
   // check which filters/sorting are selected
   const selectedFilters = findSelectedFilters()
+  console.log('selected filters', selectedFilters)
   const selectedSorting = findSelectedSorting()
+  console.log('selected sorting', selectedSorting)
   // filter recipes
   const filteredRecipes = applyFilters(selectedFilters)
+  console.log('filtered recipes', filteredRecipes)
   // sort recipes
   const sortedRecipes = sortRecipes(filteredRecipes, selectedSorting)
+  console.log('sorted recipes', sortedRecipes)
   // show recipes
   showRecipes(sortedRecipes)
 }
@@ -5241,7 +5245,7 @@ const findSelectedFilters = () => {
   // variables to save the selections
   let selectedFilters = {
     diets: [],
-    cuisine: [],
+    cuisines: [],
     cookingTime: [],
     numberOfIngredients: []
   }
@@ -5262,11 +5266,10 @@ const findSelectedSorting = () => {
   return selectedSorting
 }
 
-
 // apply selcted filters
 const applyFilters = (selectedFilters) => {
   // if no filters are selected - filteredRecipes will be all recipes
-  let filteredRecipes = RECIPES
+  let filteredRecipes = fetchedRecipes
   // loop through the selected filtersArray
   for (const [key, value] of Object.entries(selectedFilters)) {
     // filters where option(s) has been selected have a value.length > 0
@@ -5289,13 +5292,13 @@ const filterRecipes = (recipeArray, filter, value) => {
   // different cases depending on the filter
   switch (filter) {
     case 'diets':
-      // filter on diets
-      filteredRecipes = recipeArray.filter(recipe => (recipe[filter].includes(value)))
+      // filter on diets - if recipe.value is true
+      filteredRecipes = recipeArray.filter(recipe => recipe[value])
       break
-    case 'cuisine':
-      // filter on cuisine
+    case 'cuisines':
+      // filter on cuisine 
       // using .toLowerCase() and .replace(' ', '-') to change eg. 'Middle Eastern' to 'middle-eastern'
-      filteredRecipes = recipeArray.filter(recipe => (recipe[filter].toLowerCase().replace(' ', '-') === value))
+      filteredRecipes = recipeArray.filter(recipe => (recipe[filter].map(value => value.toLowerCase().replace(' ', '-')).includes(value)))
       break
     case 'cookingTime':
       // filter on cooking time
@@ -5320,16 +5323,16 @@ const filterRecipes = (recipeArray, filter, value) => {
       // filter on number of ingredients
       switch (value) {
         case 'under-5-ingredients':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length < 5))
+          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length < 5))
           break
         case '5-10-ingredients':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length >= 5 && recipe.ingredients.length <= 10))
+          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length >= 5 && recipe.extendedIngredients.length <= 10))
           break
         case '11-15-ingredients':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length >= 11 && recipe.ingredients.length <= 15))
+          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length >= 11 && recipe.extendedIngredients.length <= 15))
           break
         case 'over-15-ingredients':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.ingredients.length > 15))
+          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length > 15))
           break
         default:
           break

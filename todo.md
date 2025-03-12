@@ -1,9 +1,14 @@
+Focus on / requirements:
+[X] adjust filter function to work with api data
+[] adjust sort function to work with api data
+  [] time
+  [] popularity
+  [] price
+  [] ingredients
+
+If time allows:
 [] show filtering/sorting options when active 
-
-[X] setting up url to fetch recipes from api
-[X] changing recipe card generation to work with data from api
-[] add <a> tag with source url to recipe cards
-
+[] add <a> tag with source url to the recipe cards
 
 
 Notes:
@@ -12,10 +17,6 @@ key differences mockup data -> api data:
 * popularity -> spoonacularScore
 * ingredients -> extendedIngredients.amout extendedIngredients.name extendedIngredients.unit
 
-* to filter on Diets -> check value of keys:
-  vegan: true/false
-  vegetarian: true/false
-  dairyFree: true/false
-  glutenFree: true/false
+
 
 
