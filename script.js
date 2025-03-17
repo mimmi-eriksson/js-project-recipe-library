@@ -13,9 +13,6 @@ const API_KEY = 'cff3c1af29a94a72bf19a8b99732e061'
 const URL = `${BASE_URL}?apiKey=${API_KEY}&number=100`
 let fetchedRecipes = []
 
-let instructionsButtons = []
-let ingredientsButtons = []
-
 // saved recipes from a fetch to play around with
 const exampleRecipes = [
   {
@@ -13572,20 +13569,26 @@ const fetchData = async () => {
   try {
     const response = await fetch(URL)
     if (!response.ok) {
+      // if daily quota has been reached, error status will be 402 (payment required) - show a message to the user
+      if (response.status === 402) {
+        cardsContainer.innerHTML =
+          `
+          <article class="card placeholder">
+            <h2>Sorry, you have reached our daily quota of requests!</h2>
+            <p>Please try again tomorrow.</p>
+          </article>
+        `
+      }
       throw new Error(`Error! Status: ${response.status}`)
     }
     const data = await response.json()
-
-    console.log('data: ', data)
-
+    // filter out recipes that are missing required data
     const validRecipes = data.recipes.filter(recipe => {
       return recipe.title && recipe.image && recipe.imageType && recipe.diets.length > 0 && recipe.cuisines.length > 0 && recipe.readyInMinutes && recipe.spoonacularScore && recipe.instructions.startsWith('<ol>')
     })
-
-    console.log('valid recipes: ', validRecipes)
-
+    // save the valid recipes in the global variable
     fetchedRecipes = validRecipes
-
+    // show the fetched recipes
     showRecipes(validRecipes)
 
   } catch (error) {

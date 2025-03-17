@@ -1,5 +1,5 @@
 Focus on / requirements:
-[] Show a useful message to the user in case the daily quota has been reached
+[X] Show a useful message to the user in case the daily quota has been reached
 [] Implement local storage caching to reduce API requests
 [] fix bug with double recipes showing when applying to multiple filters
 
