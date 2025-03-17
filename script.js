@@ -13,6 +13,9 @@ const API_KEY = 'cff3c1af29a94a72bf19a8b99732e061'
 const URL = `${BASE_URL}?apiKey=${API_KEY}&number=100`
 let fetchedRecipes = []
 
+let instructionsButtons = []
+let ingredientsButtons = []
+
 // saved recipes from a fetch to play around with
 const exampleRecipes = [
   {
@@ -13828,19 +13831,19 @@ const showRecipes = (recipesArray) => {
             </span>
           </div>
           <hr>
-          <div class="details">
+          <div class="details-container">
             <div class="details-buttons-container">
-              <button type="button" class="details-button checked">
+              <button type="button" id="ingredientsBtn${recipe.id}" class="details-button active" onclick="toggleInstructions(${recipe.id})">
                 Ingredients
               </button>
-              <button type="button" class="details-button">
+              <button type="button" id="instructionsBtn${recipe.id}" class="details-button" onclick="toggleInstructions(${recipe.id})">
                 Instructions
               </button>
             </div>
-            <div class="ingredients">
+            <div id="ingredients${recipe.id}" class="details active">
               <ul>${recipe.extendedIngredients.map((ingredient) => `<li>${ingredient.amount} ${ingredient.unit} ${ingredient.name}</li>`).join('')}</ul>
             </div>
-            <div class="instructions">
+            <div id="instructions${recipe.id}" class="details">
               ${recipe.instructions}
             </div>
           </div>
@@ -13848,6 +13851,20 @@ const showRecipes = (recipesArray) => {
       `
     })
   }
+}
+
+// function to toggle ingredients and instructions
+const toggleInstructions = (recipeId) => {
+  // local DOM elements
+  const ingredientsBtn = document.getElementById(`ingredientsBtn${recipeId}`)
+  const ingredients = document.getElementById(`ingredients${recipeId}`)
+  const instructionsBtn = document.getElementById(`instructionsBtn${recipeId}`)
+  const instructions = document.getElementById(`instructions${recipeId}`)
+  // toggle classes to show/hide ingredients and instructions
+  ingredientsBtn.classList.toggle('active')
+  ingredients.classList.toggle('active')
+  instructionsBtn.classList.toggle('active')
+  instructions.classList.toggle('active')
 }
 
 // event listeners

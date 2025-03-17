@@ -210,7 +210,7 @@ input[type="radio"] {
   gap: 4px;
 }
 
-.details {
+.details-container {
   display: flex;
   flex-direction: column;
   row-gap: 16px;
@@ -235,28 +235,28 @@ input[type="radio"] {
   border-color: #0018A4;
 }
 
-.details-button.checked {
+.details-button.active {
   color: #fff;
   background: #0018A4;
 }
 
-.ingredients {
-  display: flex;
-}
-
-.ingredients ul {
-  list-style: none;
-}
-
-.instructions {
+.details {
   display: none;
 }
 
-.instructions ol {
+.details.active {
+  display: flex;
+}
+
+.details ul {
+  list-style: none;
+}
+
+.details ol {
   list-style-position: inside;
 }
 
-.instructions ol li {
+.details ol li {
   margin-bottom: 10px;
 }
 
