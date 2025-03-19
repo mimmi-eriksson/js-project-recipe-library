@@ -13,7 +13,383 @@ const API_KEY = 'cff3c1af29a94a72bf19a8b99732e061'
 const URL = `${BASE_URL}?apiKey=${API_KEY}&number=100`
 let fetchedRecipes = []
 
-// saved recipes from a fetch to play around with
+
+// initial loading of site
+const initalLoading = () => {
+  // work in progress....................................
+
+  // check if local storage is empty - if not, show the recipes from local storage
+
+
+  // if local storage is empty - fetch data from api
+  fetchData()
+
+}
+
+// fetch data from api
+const fetchData = async () => {
+  try {
+    const response = await fetch(URL)
+    if (!response.ok) {
+      // if daily quota has been reached, error status will be 402 (payment required) - then show a message to the user
+      if (response.status === 402) {
+        cardsContainer.innerHTML =
+          `
+          <article class="card placeholder">
+            <h2>Sorry, you have reached our daily quota of requests!</h2>
+            <p>Please try again tomorrow.</p>
+          </article>
+        `
+      }
+      throw new Error(`Error! Status: ${response.status}`)
+    }
+    const data = await response.json()
+    // filter out recipes that are missing required data
+    const validRecipes = data.recipes.filter(recipe => {
+      return recipe.title && recipe.image && recipe.imageType && recipe.diets.length > 0 && recipe.cuisines.length > 0 && recipe.readyInMinutes && recipe.spoonacularScore && recipe.instructions.startsWith('<ol>')
+    })
+    // save the valid recipes in the global variable
+    fetchedRecipes = validRecipes
+    // show the fetched recipes
+    showRecipes(validRecipes)
+
+  } catch (error) {
+    console.error('error: ', error.message)
+  }
+}
+
+// function to run when a filter/sorting option is changed 
+const renderRecipes = () => {
+  // check which filters/sorting are selected
+  const selectedFilters = findSelectedFilters()
+  const selectedSorting = findSelectedSorting()
+  // filter recipes
+  const filteredRecipes = applyFilters(selectedFilters)
+  // sort recipes
+  const sortedRecipes = sortRecipes(filteredRecipes, selectedSorting)
+  // show recipes
+  showRecipes(sortedRecipes)
+}
+
+// loop through the filter options to check which ones are selected
+const findSelectedFilters = () => {
+  // variable to save the selections
+  let selectedFilters = {
+    diets: [],
+    cuisines: [],
+    cookingTime: [],
+    numberOfIngredients: []
+  }
+  // if checkbox is checked - add input.id to filtering object (input.name is the key)
+  filterOptions.forEach(option => {
+    (option.checked ? selectedFilters[option.name].push(option.id) : null)
+  })
+  return selectedFilters
+}
+
+// loop through sorting options to check which one is selected
+const findSelectedSorting = () => {
+  let selectedSorting = null
+  // if radio is checked add id to sorting varaible
+  sortingOptions.forEach(option => {
+    (option.checked ? selectedSorting = option.id : null)
+  })
+  return selectedSorting
+}
+
+// apply selcted filters
+const applyFilters = (selectedFilters) => {
+  // if no filters are selected - filteredRecipes will be all recipes
+  let filteredRecipes = fetchedRecipes
+  // loop through the selected filtersArray
+  for (const [key, value] of Object.entries(selectedFilters)) {
+    // filters where option(s) has been selected have a value.length > 0
+    if (value.length > 0) {
+      // if several options have been selected - show recipes matching either of the options
+      let matchingRecipes = []
+      value.forEach(val => {
+        matchingRecipes = matchingRecipes.concat(filterRecipes(filteredRecipes, key, val))
+      })
+      // only filter on the matching recipes array when checking next filter group
+      filteredRecipes = matchingRecipes
+    }
+  }
+  return filteredRecipes
+}
+
+// filter recipes
+const filterRecipes = (recipeArray, filter, value) => {
+  let filteredRecipes
+  // different cases depending on the filter
+  switch (filter) {
+    case 'diets':
+      // filter on diets - if recipe.value is true
+      filteredRecipes = recipeArray.filter(recipe => recipe[value])
+      break
+    case 'cuisines':
+      // filter on cuisine 
+      // using .toLowerCase() and .replace(' ', '-') to change eg. 'Middle Eastern' to 'middle-eastern'
+      filteredRecipes = recipeArray.filter(recipe => (recipe[filter].map(value => value.toLowerCase().replace(' ', '-')).includes(value)))
+      break
+    case 'cookingTime':
+      // filter on cooking time
+      switch (value) {
+        case 'under-15-min':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes < 15))
+          break
+        case '15-30-min':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 15 && recipe.readyInMinutes <= 30))
+          break
+        case '30-60-min':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 30 && recipe.readyInMinutes <= 60))
+          break
+        case 'over-60-min':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes > 60))
+          break
+        default:
+          break
+      }
+      break
+    case 'numberOfIngredients':
+      // filter on number of ingredients
+      switch (value) {
+        case 'under-5-ingredients':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length < 5))
+          break
+        case '5-10-ingredients':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length >= 5 && recipe.extendedIngredients.length <= 10))
+          break
+        case '11-15-ingredients':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length >= 11 && recipe.extendedIngredients.length <= 15))
+          break
+        case 'over-15-ingredients':
+          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length > 15))
+          break
+        default:
+          break
+      }
+      break
+    default:
+      break
+  }
+  return filteredRecipes
+}
+
+// sort recipes function
+const sortRecipes = (recipesArray, sortingOption) => {
+  let sortedRecipes
+  // if a sorting option is selected - sort recipes array
+  if (sortingOption) {
+    const sortOn = sortingOption.split('-')[0]
+    const sortingOrder = sortingOption.split('-')[1]
+    // different cases for each sorting option
+    switch (sortOn) {
+      case 'time':
+        switch (sortingOrder) {
+          case 'ascending':
+            sortedRecipes = recipesArray.sort((a, b) => (a.readyInMinutes - b.readyInMinutes))
+            break
+          case 'descending':
+            sortedRecipes = recipesArray.sort((a, b) => (b.readyInMinutes - a.readyInMinutes))
+            break
+          default:
+            break
+        }
+        break
+      case 'popularity':
+        switch (sortingOrder) {
+          case 'ascending':
+            sortedRecipes = recipesArray.sort((a, b) => (a.spoonacularScore - b.spoonacularScore))
+            break
+          case 'descending':
+            sortedRecipes = recipesArray.sort((a, b) => (b.spoonacularScore - a.spoonacularScore))
+            break
+          default:
+            break
+        }
+        break
+      case 'price':
+        switch (sortingOrder) {
+          case 'ascending':
+            sortedRecipes = recipesArray.sort((a, b) => (a.pricePerServing - b.pricePerServing))
+            break
+          case 'descending':
+            sortedRecipes = recipesArray.sort((a, b) => (b.pricePerServing - a.pricePerServing))
+            break
+          default:
+            break
+        }
+        break
+      case 'ingredients':
+        switch (sortingOrder) {
+          case 'ascending':
+            sortedRecipes = recipesArray.sort((a, b) => (a.extendedIngredients.length - b.extendedIngredients.length))
+            break
+          case 'descending':
+            sortedRecipes = recipesArray.sort((a, b) => (b.extendedIngredients.length - a.extendedIngredients.length))
+            break
+          default:
+            break
+        }
+        break
+      default:
+        break
+    }
+  } else {
+    // if no sorting option is selected - sort array on recipe id
+    sortedRecipes = recipesArray.sort((a, b) => (a.id - b.id))
+  }
+  return sortedRecipes
+}
+
+// pick a random recipe
+const pickARandomRecipe = (recipesArray) => {
+  let randomRecipe = []
+  // if no recipes in array (e.g when daily quota has been reached) - do nothing
+  if (recipesArray.length === 0) {
+    return
+  }
+  // else pick a random recipe from the array
+  else {
+    randomRecipe = [recipesArray[Math.floor(Math.random() * recipesArray.length)]]
+  }
+  showRecipes(randomRecipe)
+}
+
+// show recipes - create a card and add recipe information
+const showRecipes = (recipesArray) => {
+  // clear cards container
+  cardsContainer.innerHTML = ""
+  // if no recipes matches the selected filters - recipesArray will be empty
+  if (recipesArray.length === 0) {
+    // display a message to the user
+    cardsContainer.innerHTML +=
+      `
+    <article class="card placeholder">
+      <h2>No recipes matching the selected filters</h2>
+    </article>
+    `
+  } else {
+    // display recipes in array
+    cardsContainer.innerHTML += `<div class="results-count"><p>${recipesArray.length} recipes</p></div>`
+    recipesArray.forEach(recipe => {
+      cardsContainer.innerHTML +=
+        `
+        <article class="card">
+          <a href="${recipe.sourceUrl}" target="_blank">
+            <img src="${recipe.image}" alt="${recipe.title}">
+            <h2>${recipe.title}</h2>
+          </a>
+          <hr>
+          <div class="information">
+            <span>
+            <h3>Diets:</h3>
+              <p>${recipe.diets.join(', ')}</p>
+            </span>
+            <span>
+              <h3>Cuisines:</h3>
+              <p>${recipe.cuisines.join(', ')}</p>
+            </span>
+            <span>
+              <h3>Time:</h3>
+              <p>${recipe.readyInMinutes} minutes</p>
+            </span>
+            <span>
+              <h3>Price:</h3>
+              <p>$${(recipe.pricePerServing / 100).toPrecision(2)} per serving</p>
+            </span>
+            <span>
+              <h3>Popularity:</h3>
+              <p>${Math.round(recipe.spoonacularScore)}</p>
+            </span>
+          </div>
+          <hr>
+          <div class="details-container">
+            <div class="details-buttons-container">
+              <button type="button" id="ingredientsBtn${recipe.id}" class="details-button active" onclick="toggleInstructions(${recipe.id})">
+                Ingredients
+              </button>
+              <button type="button" id="instructionsBtn${recipe.id}" class="details-button" onclick="toggleInstructions(${recipe.id})">
+                Instructions
+              </button>
+            </div>
+            <div id="ingredients${recipe.id}" class="details active">
+              <ul>${recipe.extendedIngredients.map((ingredient) => `<li>${ingredient.amount} ${ingredient.unit} ${ingredient.name}</li>`).join('')}</ul>
+            </div>
+            <div id="instructions${recipe.id}" class="details">
+              ${recipe.instructions}
+            </div>
+          </div>
+        </article>
+      `
+    })
+  }
+}
+
+// function to toggle ingredients and instructions
+const toggleInstructions = (recipeId) => {
+  // local DOM elements
+  const ingredientsBtn = document.getElementById(`ingredientsBtn${recipeId}`)
+  const ingredients = document.getElementById(`ingredients${recipeId}`)
+  const instructionsBtn = document.getElementById(`instructionsBtn${recipeId}`)
+  const instructions = document.getElementById(`instructions${recipeId}`)
+  // toggle classes to show/hide ingredients and instructions
+  ingredientsBtn.classList.toggle('active')
+  ingredients.classList.toggle('active')
+  instructionsBtn.classList.toggle('active')
+  instructions.classList.toggle('active')
+}
+
+// event listeners
+// filter/sorting options is changed (checked/unchecked by user)
+filterOptions.forEach(option => {
+  option.addEventListener("change", () => renderRecipes())
+})
+sortingOptions.forEach(option => {
+  option.addEventListener("change", () => renderRecipes())
+})
+// random recipe button is clicked
+randomButton.addEventListener("click", () => {
+  pickARandomRecipe(fetchedRecipes)
+  filterOptions.forEach(option => {
+    option.checked = false
+  })
+  sortingOptions.forEach(option => {
+    option.checked = false
+  })
+})
+// toggle dropdowns
+dropdowns.forEach(dropdown => {
+  dropdown.addEventListener('click', () => {
+    // show/hide options
+    dropdown.nextElementSibling.classList.toggle('expanded')
+    // change dropdown-icon
+    dropdown.nextElementSibling.classList.contains('expanded')
+      ? dropdown.querySelector('.dropdown-icon').innerHTML = '&#9650'
+      : dropdown.querySelector('.dropdown-icon').innerHTML = '&#9660'
+  })
+})
+// reset filters buttons is clicked
+resetFiltersButton.addEventListener('click', () => {
+  filterOptions.forEach(option => {
+    option.checked = false
+  })
+  renderRecipes()
+})
+// reset sorting buttons is clicked
+resetSortingButton.addEventListener('click', () => {
+  sortingOptions.forEach(option => {
+    option.checked = false
+  })
+  renderRecipes()
+})
+
+// on page load
+document.addEventListener("DOMContentLoaded", () => initalLoading())
+
+
+
+// saved recipes from a fetch to play around with - REMOVE BEFORE FINAL SUBMISSION
 const exampleRecipes = [
   {
     "id": 632021,
@@ -13562,358 +13938,3 @@ const exampleRecipes = [
     "spoonacularSourceUrl": "https://spoonacular.com/instant-pot-chicken-taco-soup-982382"
   }
 ]
-// fetchedRecipes = exampleRecipes
-
-// fetch data from api
-const fetchData = async () => {
-  try {
-    const response = await fetch(URL)
-    if (!response.ok) {
-      // if daily quota has been reached, error status will be 402 (payment required) - show a message to the user
-      if (response.status === 402) {
-        cardsContainer.innerHTML =
-          `
-          <article class="card placeholder">
-            <h2>Sorry, you have reached our daily quota of requests!</h2>
-            <p>Please try again tomorrow.</p>
-          </article>
-        `
-      }
-      throw new Error(`Error! Status: ${response.status}`)
-    }
-    const data = await response.json()
-    // filter out recipes that are missing required data
-    const validRecipes = data.recipes.filter(recipe => {
-      return recipe.title && recipe.image && recipe.imageType && recipe.diets.length > 0 && recipe.cuisines.length > 0 && recipe.readyInMinutes && recipe.spoonacularScore && recipe.instructions.startsWith('<ol>')
-    })
-    // save the valid recipes in the global variable
-    fetchedRecipes = validRecipes
-    // show the fetched recipes
-    showRecipes(validRecipes)
-
-  } catch (error) {
-    console.error('error: ', error.message)
-  }
-}
-
-// function to run when a filter/sorting option is changed 
-const renderRecipes = () => {
-  // check which filters/sorting are selected
-  const selectedFilters = findSelectedFilters()
-  const selectedSorting = findSelectedSorting()
-  // filter recipes
-  const filteredRecipes = applyFilters(selectedFilters)
-  // sort recipes
-  const sortedRecipes = sortRecipes(filteredRecipes, selectedSorting)
-  // show recipes
-  showRecipes(sortedRecipes)
-}
-
-// loop through the filter options to check which ones are selected
-const findSelectedFilters = () => {
-  // variables to save the selections
-  let selectedFilters = {
-    diets: [],
-    cuisines: [],
-    cookingTime: [],
-    numberOfIngredients: []
-  }
-  // if checkbox is checked - add input.id to filtering object (input.name is the key)
-  filterOptions.forEach(option => {
-    (option.checked ? selectedFilters[option.name].push(option.id) : null)
-  })
-  return selectedFilters
-}
-
-// loop through sorting options to check which one is selected
-const findSelectedSorting = () => {
-  let selectedSorting = null
-  // if radio is checked add id to sorting varaible
-  sortingOptions.forEach(option => {
-    (option.checked ? selectedSorting = option.id : null)
-  })
-  return selectedSorting
-}
-
-// apply selcted filters
-const applyFilters = (selectedFilters) => {
-  // if no filters are selected - filteredRecipes will be all recipes
-  let filteredRecipes = fetchedRecipes
-  // loop through the selected filtersArray
-  for (const [key, value] of Object.entries(selectedFilters)) {
-    // filters where option(s) has been selected have a value.length > 0
-    if (value.length > 0) {
-      // if several options have been selected - show recipes matching either of the options
-      let matchingRecipes = []
-      value.forEach(val => {
-        matchingRecipes = matchingRecipes.concat(filterRecipes(filteredRecipes, key, val))
-      })
-      // only filter on the matching recipes array when checking next filter
-      filteredRecipes = matchingRecipes
-    }
-  }
-  return filteredRecipes
-}
-
-// filter recipes
-const filterRecipes = (recipeArray, filter, value) => {
-  let filteredRecipes
-  // different cases depending on the filter
-  switch (filter) {
-    case 'diets':
-      // filter on diets - if recipe.value is true
-      filteredRecipes = recipeArray.filter(recipe => recipe[value])
-      break
-    case 'cuisines':
-      // filter on cuisine 
-      // using .toLowerCase() and .replace(' ', '-') to change eg. 'Middle Eastern' to 'middle-eastern'
-      filteredRecipes = recipeArray.filter(recipe => (recipe[filter].map(value => value.toLowerCase().replace(' ', '-')).includes(value)))
-      break
-    case 'cookingTime':
-      // filter on cooking time
-      switch (value) {
-        case 'under-15-min':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes < 15))
-          break
-        case '15-30-min':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 15 && recipe.readyInMinutes <= 30))
-          break
-        case '30-60-min':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes >= 30 && recipe.readyInMinutes <= 60))
-          break
-        case 'over-60-min':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.readyInMinutes > 60))
-          break
-        default:
-          break
-      }
-      break
-    case 'numberOfIngredients':
-      // filter on number of ingredients
-      switch (value) {
-        case 'under-5-ingredients':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length < 5))
-          break
-        case '5-10-ingredients':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length >= 5 && recipe.extendedIngredients.length <= 10))
-          break
-        case '11-15-ingredients':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length >= 11 && recipe.extendedIngredients.length <= 15))
-          break
-        case 'over-15-ingredients':
-          filteredRecipes = recipeArray.filter(recipe => (recipe.extendedIngredients.length > 15))
-          break
-        default:
-          break
-      }
-      break
-    default:
-      break
-  }
-  return filteredRecipes
-}
-
-// sort recipes function
-const sortRecipes = (recipesArray, sortingOption) => {
-  let sortedRecipes
-  // if a sorting option is selected - sort recipes array
-  if (sortingOption) {
-    const sortOn = sortingOption.split('-')[0]
-    const sortingOrder = sortingOption.split('-')[1]
-    // different cases for each sorting option
-    switch (sortOn) {
-      case 'time':
-        switch (sortingOrder) {
-          case 'ascending':
-            sortedRecipes = recipesArray.sort((a, b) => (a.readyInMinutes - b.readyInMinutes))
-            break
-          case 'descending':
-            sortedRecipes = recipesArray.sort((a, b) => (b.readyInMinutes - a.readyInMinutes))
-            break
-          default:
-            break
-        }
-        break
-      case 'popularity':
-        switch (sortingOrder) {
-          case 'ascending':
-            sortedRecipes = recipesArray.sort((a, b) => (a.spoonacularScore - b.spoonacularScore))
-            break
-          case 'descending':
-            sortedRecipes = recipesArray.sort((a, b) => (b.spoonacularScore - a.spoonacularScore))
-            break
-          default:
-            break
-        }
-        break
-      case 'price':
-        switch (sortingOrder) {
-          case 'ascending':
-            sortedRecipes = recipesArray.sort((a, b) => (a.pricePerServing - b.pricePerServing))
-            break
-          case 'descending':
-            sortedRecipes = recipesArray.sort((a, b) => (b.pricePerServing - a.pricePerServing))
-            break
-          default:
-            break
-        }
-        break
-      case 'ingredients':
-        switch (sortingOrder) {
-          case 'ascending':
-            sortedRecipes = recipesArray.sort((a, b) => (a.extendedIngredients.length - b.extendedIngredients.length))
-            break
-          case 'descending':
-            sortedRecipes = recipesArray.sort((a, b) => (b.extendedIngredients.length - a.extendedIngredients.length))
-            break
-          default:
-            break
-        }
-        break
-      default:
-        break
-    }
-  } else {
-    // if no sorting option is selected - sort array on recipe id
-    sortedRecipes = recipesArray.sort((a, b) => (a.id - b.id))
-  }
-  return sortedRecipes
-}
-
-// pick a random recipe
-const pickARandomRecipe = (recipesArray) => {
-  const randomRecipe = [recipesArray[Math.floor(Math.random() * recipesArray.length)]]
-  showRecipes(randomRecipe)
-}
-
-// show recipes - create a card and add recipe information
-const showRecipes = (recipesArray) => {
-  // clear cards container
-  cardsContainer.innerHTML = ""
-  // if no recipes matches the selected filters - recipesArray will be empty
-  if (recipesArray.length === 0) {
-    // display a message to the user
-    cardsContainer.innerHTML +=
-      `
-    <article class="card placeholder">
-      <h2>No recipes matching the selected filters</h2>
-    </article>
-    `
-  } else {
-    // display recipes in array
-    cardsContainer.innerHTML += `<div class="results-count"><p>${recipesArray.length} recipes</p></div>`
-    recipesArray.forEach(recipe => {
-      cardsContainer.innerHTML +=
-        `
-        <article class="card">
-          <a href="${recipe.sourceUrl}" target="_blank">
-            <img src="${recipe.image}" alt="${recipe.title}">
-            <h2>${recipe.title}</h2>
-          </a>
-          <hr>
-          <div class="information">
-            <span>
-            <h3>Diets:</h3>
-              <p>${recipe.diets.join(', ')}</p>
-            </span>
-            <span>
-              <h3>Cuisines:</h3>
-              <p>${recipe.cuisines.join(', ')}</p>
-            </span>
-            <span>
-              <h3>Time:</h3>
-              <p>${recipe.readyInMinutes} minutes</p>
-            </span>
-            <span>
-              <h3>Price:</h3>
-              <p>$${(recipe.pricePerServing / 100).toPrecision(2)} per serving</p>
-            </span>
-            <span>
-              <h3>Popularity:</h3>
-              <p>${Math.round(recipe.spoonacularScore)}</p>
-            </span>
-          </div>
-          <hr>
-          <div class="details-container">
-            <div class="details-buttons-container">
-              <button type="button" id="ingredientsBtn${recipe.id}" class="details-button active" onclick="toggleInstructions(${recipe.id})">
-                Ingredients
-              </button>
-              <button type="button" id="instructionsBtn${recipe.id}" class="details-button" onclick="toggleInstructions(${recipe.id})">
-                Instructions
-              </button>
-            </div>
-            <div id="ingredients${recipe.id}" class="details active">
-              <ul>${recipe.extendedIngredients.map((ingredient) => `<li>${ingredient.amount} ${ingredient.unit} ${ingredient.name}</li>`).join('')}</ul>
-            </div>
-            <div id="instructions${recipe.id}" class="details">
-              ${recipe.instructions}
-            </div>
-          </div>
-        </article>
-      `
-    })
-  }
-}
-
-// function to toggle ingredients and instructions
-const toggleInstructions = (recipeId) => {
-  // local DOM elements
-  const ingredientsBtn = document.getElementById(`ingredientsBtn${recipeId}`)
-  const ingredients = document.getElementById(`ingredients${recipeId}`)
-  const instructionsBtn = document.getElementById(`instructionsBtn${recipeId}`)
-  const instructions = document.getElementById(`instructions${recipeId}`)
-  // toggle classes to show/hide ingredients and instructions
-  ingredientsBtn.classList.toggle('active')
-  ingredients.classList.toggle('active')
-  instructionsBtn.classList.toggle('active')
-  instructions.classList.toggle('active')
-}
-
-// event listeners
-// filter/sorting options is changed (checked/unchecked by user)
-filterOptions.forEach(option => {
-  option.addEventListener("change", () => renderRecipes())
-})
-sortingOptions.forEach(option => {
-  option.addEventListener("change", () => renderRecipes())
-})
-// random recipe button is clicked
-randomButton.addEventListener("click", () => {
-  pickARandomRecipe(fetchedRecipes)
-  filterOptions.forEach(option => {
-    option.checked = false
-  })
-  sortingOptions.forEach(option => {
-    option.checked = false
-  })
-})
-// toggle dropdowns
-dropdowns.forEach(dropdown => {
-  dropdown.addEventListener('click', () => {
-    // show/hide options
-    dropdown.nextElementSibling.classList.toggle('expanded')
-    // change dropdown-icon
-    dropdown.nextElementSibling.classList.contains('expanded')
-      ? dropdown.querySelector('.dropdown-icon').innerHTML = '&#9650'
-      : dropdown.querySelector('.dropdown-icon').innerHTML = '&#9660'
-  })
-})
-// reset filters buttons is clicked
-resetFiltersButton.addEventListener('click', () => {
-  filterOptions.forEach(option => {
-    option.checked = false
-  })
-  renderRecipes()
-})
-// reset sorting buttons is clicked
-resetSortingButton.addEventListener('click', () => {
-  sortingOptions.forEach(option => {
-    option.checked = false
-  })
-  renderRecipes()
-})
-
-// fetch recipes when site is loaded
-// document.getElementsByTagName("html")[0].addEventListener("load", showRecipes(fetchedRecipes))
-document.getElementsByTagName("html")[0].addEventListener("load", fetchData())
