@@ -13,22 +13,24 @@ const API_KEY = 'cff3c1af29a94a72bf19a8b99732e061'
 const URL = `${BASE_URL}?apiKey=${API_KEY}&number=100`
 let fetchedRecipes = []
 
-
 // initial loading of site
 const initalLoading = () => {
-  // work in progress....................................
-
-  // check if local storage is empty - if not, show the recipes from local storage
-
-
-  // if local storage is empty - fetch data from api
-  fetchData()
-
+  // check if there are recipes in local storage
+  const storedRecipes = localStorage.getItem('recipes')
+  // if there are recipes in local storage - use them
+  if (storedRecipes) {
+    fetchedRecipes = JSON.parse(storedRecipes)
+    showRecipes(fetchedRecipes)
+  } else {
+    // if local storage is empty - fetch data from api
+    fetchData()
+  }
 }
 
 // fetch data from api
 const fetchData = async () => {
   try {
+    // fetch data from api
     const response = await fetch(URL)
     if (!response.ok) {
       // if daily quota has been reached, error status will be 402 (payment required) - then show a message to the user
@@ -36,7 +38,7 @@ const fetchData = async () => {
         cardsContainer.innerHTML =
           `
           <article class="card placeholder">
-            <h2>Sorry, you have reached our daily quota of requests!</h2>
+            <h2>Sorry, we have reached our daily quota of requests!</h2>
             <p>Please try again tomorrow.</p>
           </article>
         `
@@ -50,11 +52,15 @@ const fetchData = async () => {
     })
     // save the valid recipes in the global variable
     fetchedRecipes = validRecipes
+    // save the valid recipes in local storage
+    console.log(fetchedRecipes)
+    localStorage.setItem('recipes', JSON.stringify(fetchedRecipes))
     // show the fetched recipes
-    showRecipes(validRecipes)
+    showRecipes(fetchedRecipes)
 
   } catch (error) {
     console.error('error: ', error.message)
+    // inner html to show error message to user
   }
 }
 
