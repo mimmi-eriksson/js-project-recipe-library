@@ -1,6 +1,6 @@
 Focus on / requirements:
 [X] Implement local storage caching to reduce API requests
-[] fix bug with double recipes showing when applying to multiple filters
+[X] fix bug with double recipes showing when applying to multiple filters
 
 
 Strech goals (pick at least one below):

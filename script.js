@@ -114,7 +114,14 @@ const applyFilters = (selectedFilters) => {
       // if several options have been selected - show recipes matching either of the options
       let matchingRecipes = []
       value.forEach(val => {
-        matchingRecipes = matchingRecipes.concat(filterRecipes(filteredRecipes, key, val))
+        // filter on the selected filter
+        const recipesMatch = filterRecipes(fetchedRecipes, key, val)
+        // if recipe is not already in matchingRecipes - add it
+        recipesMatch.forEach(recipe => {
+          if (!matchingRecipes.includes(recipe)) {
+            matchingRecipes.push(recipe)
+          }
+        })
       })
       // only filter on the matching recipes array when checking next filter group
       filteredRecipes = matchingRecipes
